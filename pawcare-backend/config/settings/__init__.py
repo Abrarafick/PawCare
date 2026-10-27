@@ -1,0 +1,2 @@
+"""PawCare settings package"""
+

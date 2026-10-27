@@ -1,0 +1,2 @@
+"""PawCare apps package"""
+

@@ -1,0 +1,115 @@
+# PawCare .gitignore
+
+# ─── Python / Django ─────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+.env/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Environment files — NEVER COMMIT
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Private media (uploaded files — NEVER COMMIT real user data)
+pawcare-backend/private_media/
+private_media/
+
+# Static files (collected)
+pawcare-backend/staticfiles/
+staticfiles/
+
+# ─── Node / React / TypeScript ───────────────────────────────
+node_modules/
+pawcare-frontend/node_modules/
+dist/
+pawcare-frontend/dist/
+.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.cache/
+.parcel-cache/
+
+# Vite
+pawcare-frontend/.vite/
+
+# ─── Testing ─────────────────────────────────────────────────
+.coverage
+coverage/
+htmlcov/
+.pytest_cache/
+.tox/
+*.cover
+*.py,cover
+.hypothesis/
+# Frontend coverage
+pawcare-frontend/coverage/
+
+# Playwright
+playwright-report/
+test-results/
+
+# ─── IDEs and Editors ────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Docker ──────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ─── Database dumps (NEVER COMMIT user data) ─────────────────
+*.sql
+*.dump
+*.db
+
+# ─── Secrets and keys (NEVER COMMIT) ─────────────────────────
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# ─── Misc ────────────────────────────────────────────────────
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+
