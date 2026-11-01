@@ -18,11 +18,14 @@ class Pet(models.Model):
     )
     name = models.CharField(max_length=100)
     species = models.CharField(max_length=50, choices=SPECIES_CHOICES)
+    breed = models.CharField(max_length=100, blank=True, help_text="e.g. Persian, Golden Retriever")
+    gender = models.CharField(max_length=20, blank=True, help_text="Male, Female, etc.")
     date_of_birth = models.DateField(null=True, blank=True)
     estimated_age = models.CharField(
         max_length=50, blank=True,
         help_text='e.g. "~3 years" — used only when date of birth is unknown'
     )
+    weight = models.CharField(max_length=50, blank=True, help_text="e.g. 4.2 kg, 12 lbs")
     photo_key = models.CharField(
         max_length=500, blank=True,
         help_text='Storage key for the pet photo (not a public URL)'

@@ -1,111 +1,1480 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Reference Palette: Soft Mint & Warm Natural Tones */
+  --mint: #9ad971;
+  --mint-hover: #8ac960;
+  --mint-light: #ebf7e2;
+  --mint-dark: #1e3911;
+  --mint-subtle: #f4faef;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Dog Category Palette (Preserving existing soft mint-green) */
+  --dog-color: #9ad971;
+  --dog-color-hover: #8ac960;
+  --dog-color-light: #ebf7e2;
+  --dog-color-dark: #1e3911;
+  --dog-color-subtle: #f4faef;
+  --dog-glow: rgba(154, 217, 113, 0.28);
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Cat Category Palette (Soft pastel yellow matching mint-green lightness & visual intensity) */
+  --cat-color: #f6dc79;
+  --cat-color-hover: #edd064;
+  --cat-color-light: #fef8e2;
+  --cat-color-dark: #574003;
+  --cat-color-subtle: #fdfbf2;
+  --cat-glow: rgba(246, 220, 121, 0.35);
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --bg-page: #f8faf6;
+  --bg-card: #ffffff;
+  --bg-chip: #f2f5ef;
+  --bg-chip-hover: #e8ede3;
+  --border-light: #e6ede2;
+  --border-subtle: #f0f4ed;
+
+  --text-main: #141c13;
+  --text-muted: #6b7a67;
+  --text-soft: #8e9e8a;
+
+  /* Universal Soft Hover Highlight Glow */
+  --hover-highlight-glow: rgba(154, 217, 113, 0.2);
+  --hover-highlight-border: rgba(154, 217, 113, 0.45);
+  --hover-cat-glow: rgba(246, 220, 121, 0.25);
+  --hover-cat-border: rgba(246, 220, 121, 0.55);
+
+  /* Healthcare Status Accents */
+  --status-upcoming-bg: #ebf7e2;
+  --status-upcoming-text: #2c591b;
+  --status-duesoon-bg: #fef3c7;
+  --status-duesoon-text: #b45309;
+  --status-overdue-bg: #fee2e2;
+  --status-overdue-text: #dc2626;
+  --status-completed-bg: #dcfce7;
+  --status-completed-text: #15803d;
+
+  --radius-xs: 8px;
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+  --radius-full: 9999px;
+
+  --shadow-card: 0 10px 30px rgba(20, 28, 19, 0.04);
+  --shadow-float: 0 14px 40px rgba(20, 28, 19, 0.08);
+  --shadow-btn: 0 4px 14px rgba(154, 217, 113, 0.35);
+
+  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --transition-smooth: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+* {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+img, svg, video {
+  max-width: 100%;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition-smooth);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+button, input, select, textarea {
+  font-family: inherit;
+  transition: var(--transition-smooth);
+}
+
+/* App Shell */
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1140px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 6.5rem 1.25rem; /* Spacious bottom padding so floating dock never obscures content */
+  position: relative;
+  z-index: 10;
+}
+
+/* Header & Navbar */
+.paw-navbar {
+  background: rgba(248, 250, 246, 0.85);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: 0.85rem 1.25rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(230, 237, 226, 0.6);
+  transition: var(--transition-smooth);
+}
+
+.paw-navbar-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paw-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.paw-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-light);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+}
+
+.paw-user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--mint-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mint-dark);
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-full);
+  transition: var(--transition-smooth);
+}
+
+.brand-badge:hover {
+  background: var(--mint-subtle);
+  box-shadow: 0 4px 14px var(--hover-highlight-glow);
+}
+
+.paw-user-badge:hover {
+  background: var(--mint-subtle);
+  border-color: var(--hover-highlight-border);
+  box-shadow: 0 4px 14px var(--hover-highlight-glow);
+}
+
+.brand-icon-bubble {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  background: var(--mint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mint-dark);
+  transition: var(--transition-smooth);
+}
+
+.brand-badge:hover .brand-icon-bubble {
+  transform: scale(1.05);
+}
+
+/* Circular Buttons with Subtle Hover Effect */
+.btn-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  position: relative;
+}
+
+.btn-circle:hover {
+  background: var(--mint-subtle);
+  border-color: var(--hover-highlight-border);
+  box-shadow: 0 6px 18px var(--hover-highlight-glow), 0 0 0 2px rgba(154, 217, 113, 0.15);
+  transform: translateY(-1px);
+  color: var(--mint-dark);
+}
+
+.btn-circle:active {
+  transform: translateY(0);
+}
+
+/* Pill Buttons with Subtle Hover Highlights */
+.btn-pill {
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  white-space: nowrap;
+  position: relative;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.btn-pill-primary {
+  background: var(--mint);
+  color: var(--mint-dark);
+  box-shadow: var(--shadow-btn);
 }
+
+.btn-pill-primary:hover {
+  background: var(--mint-hover);
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 22px rgba(154, 217, 113, 0.42), 0 0 0 3px rgba(154, 217, 113, 0.2);
+}
+
+.btn-pill-secondary {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.btn-pill-secondary:hover {
+  background: var(--mint-subtle);
+  border-color: var(--hover-highlight-border);
+  color: var(--mint-dark);
+  box-shadow: 0 6px 18px var(--hover-highlight-glow), 0 0 0 2px rgba(154, 217, 113, 0.12);
+  transform: translateY(-1.5px);
+}
+
+.btn-pill-danger {
+  background: var(--status-overdue-bg);
+  color: var(--status-overdue-text);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+.btn-pill-danger:hover {
+  background: #fca5a5;
+  color: #991b1b;
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.2);
+  transform: translateY(-1.5px);
+}
+
+.btn-pill-sm {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.85rem;
+}
+
+.btn-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Rounded Cards with Subtle Hover Highlights */
+.paw-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-subtle);
+  transition: var(--transition-smooth);
+}
+
+.paw-card:hover {
+  box-shadow: var(--shadow-float), 0 0 0 1px var(--hover-highlight-border);
+  border-color: var(--hover-highlight-border);
+  transform: translateY(-2px);
+}
+
+a.paw-card:hover,
+button.paw-card:hover,
+.paw-card[style*="cursor: pointer"]:hover,
+.paw-card[style*="cursor:pointer"]:hover {
+  box-shadow: 0 14px 32px var(--hover-highlight-glow), 0 0 0 1.5px var(--hover-highlight-border);
+  border-color: var(--hover-highlight-border);
+  transform: translateY(-2px);
+}
+
+/* Mint Hero Card for Dogs */
+.hero-pet-card {
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-smooth);
+}
+
+.hero-pet-card-dog {
+  background: var(--dog-color);
+  color: var(--dog-color-dark);
+  box-shadow: 0 16px 36px var(--dog-glow);
+}
+
+.hero-pet-card-dog:hover {
+  box-shadow: 0 20px 42px rgba(154, 217, 113, 0.42);
+}
+
+/* Pastel Yellow Hero Card for Cats */
+.hero-pet-card-cat {
+  background: var(--cat-color);
+  color: var(--cat-color-dark);
+  box-shadow: 0 16px 36px var(--cat-glow);
+}
+
+.hero-pet-card-cat:hover {
+  box-shadow: 0 20px 42px rgba(246, 220, 121, 0.45);
+}
+
+/* Home Pet Introduction Dual Section Grid (Mobile-First) */
+.home-pet-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 820px) {
+  .home-pet-intro-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: stretch;
+  }
+}
+
+/* Next Vaccination Card (Right Side in Hero Intro) */
+.home-next-vax-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 1.6rem;
+  box-shadow: var(--shadow-card);
+  border: 1.5px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition-smooth);
+}
+
+.home-next-vax-card:hover {
+  box-shadow: var(--shadow-float), 0 0 0 1px var(--hover-highlight-border);
+  border-color: var(--hover-highlight-border);
+  transform: translateY(-2px);
+}
+
+/* Quick Care Mobile-First Grid & Cards */
+.quick-care-mobile-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+@media (min-width: 768px) {
+  .quick-care-mobile-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.15rem;
+  }
+}
+
+.quick-care-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.35rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.quick-care-card:hover {
+  box-shadow: 0 10px 28px var(--hover-highlight-glow), 0 0 0 1.5px var(--hover-highlight-border);
+  border-color: var(--hover-highlight-border);
+  transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+  .quick-care-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.6rem;
+    min-height: 175px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-pet-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.25rem 2.5rem;
+  }
+}
+
+.hero-pet-info {
+  z-index: 2;
+  max-width: 480px;
+}
+
+.hero-pet-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-size: 0.825rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.hero-pet-tag-dog {
+  color: var(--dog-color-dark);
+}
+
+.hero-pet-tag-cat {
+  color: var(--cat-color-dark);
+}
+
+.hero-pet-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+/* Stat Chips (Gender, Age, Weight) */
+.stat-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  margin: 1.5rem 0;
+}
+
+.stat-chip {
+  background: var(--bg-chip);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  text-align: center;
+  border: 1px solid var(--border-subtle);
+  transition: var(--transition-smooth);
+}
+
+.stat-chip:hover {
+  background: #ffffff;
+  border-color: var(--hover-highlight-border);
+  box-shadow: 0 4px 14px var(--hover-highlight-glow);
+  transform: translateY(-1px);
+}
+
+.stat-chip-label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: capitalize;
+  margin-bottom: 0.2rem;
+}
+
+.stat-chip-val {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+/* Pet Category Pills Carousel */
+.category-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.25rem 1.25rem 0.25rem;
+  scrollbar-width: none;
+}
+
+.category-pills-row::-webkit-scrollbar {
+  display: none;
+}
+
+.pet-category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-smooth);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+/* Subtle Hover Effect for Dog / Standard Pills */
+.pet-category-pill:hover {
+  background: var(--mint-subtle);
+  color: var(--mint-dark);
+  border-color: var(--hover-highlight-border);
+  box-shadow: 0 6px 18px var(--hover-highlight-glow), 0 0 0 2px rgba(154, 217, 113, 0.15);
+  transform: translateY(-1.5px);
+}
+
+/* Subtle Hover Effect for Cat Pills */
+.pet-category-pill-cat:hover {
+  background: var(--cat-color-subtle);
+  color: var(--cat-color-dark);
+  border-color: var(--hover-cat-border);
+  box-shadow: 0 6px 18px var(--hover-cat-glow), 0 0 0 2px rgba(246, 220, 121, 0.2);
+  transform: translateY(-1.5px);
+}
+
+/* Active Dog Pill (Soft Mint-Green) */
+.pet-category-pill.active-dog,
+.pet-category-pill.active {
+  background: var(--dog-color);
+  border-color: var(--dog-color);
+  color: var(--dog-color-dark);
+  box-shadow: 0 6px 18px var(--dog-glow);
+}
+
+/* Active Cat Pill (Soft Pastel Yellow) */
+.pet-category-pill.active-cat {
+  background: var(--cat-color);
+  border-color: var(--cat-color);
+  color: var(--cat-color-dark);
+  box-shadow: 0 6px 18px var(--cat-glow);
+}
+
+.pet-category-pill-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+/* Navigation Tabs (Overview, Reminders, Vault, History) */
+.sub-nav-tabs {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  margin-bottom: 1.75rem;
+  padding-bottom: 0.25rem;
+}
+
+.sub-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-smooth);
+}
+
+.sub-nav-tab:hover {
+  color: var(--mint-dark);
+  background: var(--mint-subtle);
+  border-color: var(--hover-highlight-border);
+  box-shadow: 0 6px 16px var(--hover-highlight-glow), 0 0 0 2px rgba(154, 217, 113, 0.14);
+  transform: translateY(-1px);
+}
+
+.sub-nav-tab.active {
+  background: var(--text-main);
+  color: #ffffff;
+  border-color: var(--text-main);
+  box-shadow: 0 4px 14px rgba(20, 28, 19, 0.15);
+}
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: 0.775rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.01em;
+  transition: var(--transition-smooth);
+}
+
+.status-upcoming {
+  background: var(--status-upcoming-bg);
+  color: var(--status-upcoming-text);
+}
+
+.status-duesoon {
+  background: var(--status-duesoon-bg);
+  color: var(--status-duesoon-text);
+}
+
+.status-overdue {
+  background: var(--status-overdue-bg);
+  color: var(--status-overdue-text);
+}
+
+.status-completed {
+  background: var(--status-completed-bg);
+  color: var(--status-completed-text);
+}
+
+/* Form Styling */
+.paw-input-group {
+  margin-bottom: 1.35rem;
+}
+
+.paw-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+}
+
+.paw-input, .paw-select, .paw-textarea {
+  width: 100%;
+  padding: 0.8rem 1.15rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+}
+
+.paw-input:hover, .paw-select:hover, .paw-textarea:hover {
+  border-color: var(--hover-highlight-border);
+  box-shadow: 0 2px 8px var(--hover-highlight-glow);
+}
+
+.paw-input:focus, .paw-select:focus, .paw-textarea:focus {
+  outline: none;
+  border-color: var(--mint);
+  box-shadow: 0 0 0 4px rgba(154, 217, 113, 0.25);
+  background: #ffffff;
+}
+
+.paw-help {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+/* Pill Radio Checkboxes with Species Accents */
+.pill-radio-group {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.pill-radio-btn {
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-chip);
+  border: 1.5px solid transparent;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.pill-radio-btn:hover {
+  background: var(--bg-chip-hover);
+  border-color: var(--hover-highlight-border);
+  box-shadow: 0 4px 12px var(--hover-highlight-glow);
+}
+
+/* Dog active option: soft mint green */
+.pill-radio-btn.active-dog {
+  background: var(--dog-color);
+  color: var(--dog-color-dark);
+  border-color: var(--dog-color);
+  box-shadow: 0 4px 14px var(--dog-glow);
+}
+
+/* Cat active option: soft pastel yellow */
+.pill-radio-btn.active-cat {
+  background: var(--cat-color);
+  color: var(--cat-color-dark);
+  border-color: var(--cat-color);
+  box-shadow: 0 4px 14px var(--cat-glow);
+}
+
+/* Alerts */
+.paw-alert {
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.925rem;
+  margin-bottom: 1.5rem;
+  transition: var(--transition-smooth);
+}
+
+.paw-alert-overdue {
+  background: var(--status-overdue-bg);
+  color: var(--status-overdue-text);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.paw-alert-warning {
+  background: var(--status-duesoon-bg);
+  color: var(--status-duesoon-text);
+  border: 1px solid rgba(180, 83, 9, 0.2);
+}
+
+.paw-alert-success {
+  background: var(--status-completed-bg);
+  color: var(--status-completed-text);
+  border: 1px solid rgba(21, 128, 61, 0.2);
+}
+
+/* Modals */
+.paw-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 28, 19, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1.25rem;
+}
+
+.paw-modal-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  max-width: 540px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 2rem;
+  box-shadow: var(--shadow-float);
+  position: relative;
+}
+
+.paw-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.paw-modal-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Grids */
+.grid-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.35rem;
+}
+
+@media (min-width: 620px) {
+  .grid-cards {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+.paw-form-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .paw-form-2col {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+/* Empty States */
+.paw-empty-state {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  border: 2px dashed var(--border-light);
+}
+
+.paw-empty-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   Floating Pill Bottom Navigation Bar (Matched to reference image)
+   ========================================================================== */
+.paw-floating-bottom-nav {
+  position: fixed;
+  bottom: calc(1.35rem + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: min(320px, calc(100vw - 2rem));
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: var(--radius-full);
+  padding: 0.35rem 0.5rem;
+  box-shadow: 0 12px 36px rgba(20, 28, 19, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(220, 230, 215, 0.85);
+  user-select: none;
+}
+
+.bottom-nav-track {
+  display: flex;
+  position: relative;
+  width: 100%;
+  align-items: center;
+  height: 52px;
+}
+
+/* Sliding Mint-Green Circular Indicator (Spring / Ease-in-out flowing motion) */
+.bottom-nav-slider-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.bottom-nav-slider-bubble {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 4px 16px rgba(154, 217, 113, 0.5);
+  transition: background 300ms ease, box-shadow 300ms ease;
+}
+
+/* ==========================================================================
+   Cat Theme Color Propagation (Logo, Navigation Bar, Add New Pet Button & Accents)
+   ========================================================================== */
+.theme-cat .brand-icon-bubble {
+  background: var(--cat-color) !important;
+  color: var(--cat-color-dark) !important;
+  box-shadow: 0 4px 14px var(--cat-glow);
+}
+
+.theme-cat .paw-user-avatar {
+  background: var(--cat-color-light) !important;
+  color: var(--cat-color-dark) !important;
+}
+
+.theme-cat .btn-pill-primary {
+  background: var(--cat-color) !important;
+  color: var(--cat-color-dark) !important;
+  box-shadow: 0 4px 14px var(--cat-glow) !important;
+}
+
+.theme-cat .btn-pill-primary:hover {
+  background: var(--cat-color-hover) !important;
+  box-shadow: 0 8px 22px rgba(246, 220, 121, 0.48), 0 0 0 3px rgba(246, 220, 121, 0.22) !important;
+}
+
+.theme-cat .bottom-nav-slider-bubble {
+  background: var(--cat-color) !important;
+  box-shadow: 0 4px 16px var(--cat-glow) !important;
+}
+
+.theme-cat .paw-floating-bottom-nav {
+  border-color: rgba(246, 220, 121, 0.35);
+  box-shadow: 0 12px 36px var(--cat-glow), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.theme-cat .brand-badge:hover {
+  background: var(--cat-color-subtle);
+  box-shadow: 0 4px 14px var(--cat-glow);
+}
+
+.theme-cat .paw-user-badge:hover {
+  background: var(--cat-color-subtle);
+  border-color: var(--hover-cat-border);
+  box-shadow: 0 4px 14px var(--cat-glow);
+}
+
+.theme-cat .btn-circle:hover {
+  background: var(--cat-color-subtle);
+  border-color: var(--hover-cat-border);
+  box-shadow: 0 6px 18px var(--cat-glow), 0 0 0 2px rgba(246, 220, 121, 0.18);
+  color: var(--cat-color-dark);
+}
+
+.theme-cat .btn-pill-secondary:hover {
+  background: var(--cat-color-subtle);
+  border-color: var(--hover-cat-border);
+  color: var(--cat-color-dark);
+  box-shadow: 0 6px 18px var(--cat-glow);
+}
+
+/* Individual Slot Buttons */
+.bottom-nav-slot-btn {
+  flex: 1;
+  width: 25%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Inactive Light-Grey Circular Background */
+.bottom-nav-slot-bg {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #edf2ea;
+  z-index: 1;
+  transition: background 250ms ease, transform 250ms ease;
+}
+
+.bottom-nav-slot-btn:hover .bottom-nav-slot-bg {
+  background: #e3ece0;
+  transform: scale(1.04);
+}
+
+/* Centered Navigation Icons */
+.bottom-nav-slot-icon {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 250ms ease, transform 300ms cubic-bezier(0.34, 1.38, 0.64, 1);
+}
+
+.bottom-nav-slot-icon.active {
+  color: #141c13;
+  transform: scale(1.08);
+}
+
+.bottom-nav-slot-icon.inactive {
+  color: #586655;
+  transform: scale(1);
+}
+
+.bottom-nav-slot-btn:hover .bottom-nav-slot-icon.inactive {
+  color: #1e281b;
+}
+
+/* ==========================================================================
+   Fixed Pet-Specific Background System (Stationary Viewport Layer)
+   ========================================================================== */
+.paw-fixed-background-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+.paw-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 450ms cubic-bezier(0.16, 1, 0.3, 1), visibility 450ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+  overflow: hidden;
+}
+
+.paw-bg-layer.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Atmospheric Sky Gradients */
+.paw-bg-sky-gradient {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dog-sky {
+  background: radial-gradient(circle at 50% 10%, #ffffff 0%, #f6fbf4 45%, #ecf5e9 100%);
+}
+
+.cat-sky {
+  background: radial-gradient(circle at 50% 10%, #ffffff 0%, #fefcf5 45%, #fcf6e3 100%);
+}
+
+.neutral-sky {
+  background: radial-gradient(circle at 50% 10%, #ffffff 0%, #f9fbf8 50%, #eff4ec 100%);
+}
+
+/* Sun Glow Accents */
+.dog-sun-glow {
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(154, 217, 113, 0.22) 0%, rgba(154, 217, 113, 0) 70%);
+  pointer-events: none;
+}
+
+.cat-sun-glow {
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(246, 220, 121, 0.28) 0%, rgba(246, 220, 121, 0) 70%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Central Focal Stage (Owner + Pet in the Center at 55–65% Height)
+   Completely borderless, naturally blended into the background
+   ========================================================================== */
+.paw-focal-center-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.paw-focal-art-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(340px, 60vh, 580px); /* 55–65% of visible viewport height */
+  width: clamp(320px, 60vh, 580px);
+  max-width: 92vw;
+  pointer-events: none;
+  /* Radial feathering mask completely dissolves any image edge into natural space */
+  mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 50%, transparent 98%);
+  -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 50%, transparent 98%);
+}
+
+.paw-focal-illustration-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  opacity: 0.44;
+  filter: saturate(1.08);
+  transform: translateZ(0);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Surrounding Decorative Orbit
+   Balanced around the main illustration in corners & edges
+   ========================================================================== */
+.paw-decor-orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.dog-decor-theme {
+  color: #3f782c;
+}
+
+.cat-decor-theme {
+  color: #c28b12;
+}
+
+.paw-decor-item {
+  position: absolute;
+  pointer-events: none;
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+
+/* Top Left Corner: Paws & Floating Heart */
+.decor-top-left-1 {
+  top: 6%;
+  left: 5%;
+}
+
+.decor-top-left-2 {
+  top: 13%;
+  left: 9%;
+}
+
+/* Top Right Corner: Fluffy Cloud & Sparkle */
+.decor-top-right-cloud {
+  top: 5%;
+  right: 6%;
+}
+
+.decor-top-right-sparkle {
+  top: 14%;
+  right: 10%;
+}
+
+/* Mid Flanks: Food Bowl, Bones & Toys */
+.decor-mid-left {
+  top: 48%;
+  left: 4%;
+  transform: translateY(-50%);
+}
+
+.decor-mid-right {
+  top: 48%;
+  right: 4%;
+  transform: translateY(-50%);
+}
+
+/* Bottom Left Corner */
+.decor-bottom-left-bowl {
+  bottom: 12%;
+  left: 6%;
+}
+
+.decor-bottom-left-paw {
+  bottom: 6%;
+  left: 11%;
+}
+
+/* Bottom Right Corner */
+.decor-bottom-right-bone {
+  bottom: 12%;
+  right: 6%;
+}
+
+.decor-bottom-right-heart {
+  bottom: 6%;
+  right: 11%;
+}
+
+/* Soft Scrim Layer for 100% Crisp Content Readability */
+.paw-bg-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.dog-scrim {
+  background: linear-gradient(180deg, rgba(248, 251, 246, 0.92) 0%, rgba(248, 251, 246, 0.65) 50%, rgba(248, 251, 246, 0.28) 100%);
+}
+
+.cat-scrim {
+  background: linear-gradient(180deg, rgba(254, 252, 246, 0.92) 0%, rgba(254, 252, 246, 0.65) 50%, rgba(254, 252, 246, 0.28) 100%);
+}
+
+/* Neutral Theme Subtle Paw Watermark */
+.neutral-paw-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: radial-gradient(#1e3911 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+}
+
+/* ==========================================================================
+   Sliding Content Layer (Page Transitions)
+   The background stays completely fixed; only the foreground container slides.
+   ========================================================================== */
+.paw-sliding-viewport-wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  touch-action: pan-y pinch-zoom;
+}
+
+.paw-sliding-page-panel {
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+/* Moving forward (lower to higher index, e.g. Home -> Pets): Content slides LEFT (enters from right) */
+@keyframes pawSlideContentLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(70px, 0, 0);
+  }
+  35% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Moving backward (higher to lower index, e.g. Health -> Pets): Content slides RIGHT (enters from left) */
+@keyframes pawSlideContentRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(-70px, 0, 0);
+  }
+  35% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pawPageFade {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.paw-slide-content-left {
+  animation: pawSlideContentLeft 380ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.paw-slide-content-right {
+  animation: pawSlideContentRight 380ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.paw-page-fade {
+  animation: pawPageFade 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paw-slide-content-left,
+  .paw-slide-content-right,
+  .paw-page-fade {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile-First Responsiveness & Cross-Device Compatibility
+   Supports all phones: 320px, 360px, 375px, 390px, 414px+, tablets & desktops
+   ========================================================================== */
+@media (max-width: 640px) {
+  .main-content {
+    padding: 1rem 0.85rem 6.5rem 0.85rem;
+  }
+
+  .paw-card {
+    padding: 1.25rem 1rem !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  .hero-pet-card {
+    padding: 1.35rem 1.15rem !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  .hero-pet-title {
+    font-size: 1.7rem !important;
+  }
+
+  .stat-chips-grid {
+    gap: 0.5rem;
+  }
+
+  .stat-chip {
+    padding: 0.65rem 0.5rem;
+  }
+
+  /* Responsive Center Stage & Decorative Scaling */
+  .paw-focal-art-frame {
+    height: clamp(300px, 58vh, 460px);
+    width: clamp(280px, 58vh, 460px);
+  }
+
+  .paw-decor-item {
+    transform: scale(0.85);
+  }
+
+  .decor-top-left-1 { top: 4%; left: 3%; }
+  .decor-top-left-2 { top: 9%; left: 6%; }
+  .decor-top-right-cloud { top: 4%; right: 4%; }
+  .decor-top-right-sparkle { top: 10%; right: 7%; }
+  .decor-mid-left { left: 2%; }
+  .decor-mid-right { right: 2%; }
+  .decor-bottom-left-bowl { bottom: 9%; left: 4%; }
+  .decor-bottom-left-paw { bottom: 5%; left: 8%; }
+  .decor-bottom-right-bone { bottom: 9%; right: 4%; }
+  .decor-bottom-right-heart { bottom: 5%; right: 8%; }
+}
+
+@media (max-width: 480px) {
+  .paw-navbar {
+    padding: 0.65rem 0.85rem;
+  }
+
+  .brand-title {
+    font-size: 1.2rem;
+  }
+
+  .paw-user-email {
+    display: none;
+  }
+
+  .paw-user-badge {
+    padding: 0.35rem;
+  }
+
+  .quick-care-card {
+    padding: 1rem 1.1rem;
+  }
+
+  .paw-modal-card {
+    padding: 1.25rem 1rem !important;
+    max-width: calc(100vw - 1.5rem) !important;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .main-content {
+    padding: 0.75rem 0.65rem 6.5rem 0.65rem;
+  }
+
+  .brand-title {
+    font-size: 1.05rem;
+  }
+
+  .brand-badge {
+    gap: 0.4rem;
+    padding: 0.25rem 0.4rem;
+  }
+
+  .brand-icon-bubble {
+    width: 32px;
+    height: 32px;
+  }
+
+  .btn-circle {
+    width: 38px;
+    height: 38px;
+  }
+
+  .paw-floating-bottom-nav {
+    width: calc(100vw - 1rem);
+    padding: 0.25rem 0.35rem;
+    bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .bottom-nav-slot-bg,
+  .bottom-nav-slider-bubble {
+    width: 38px;
+    height: 38px;
+  }
+
+  .bottom-nav-track {
+    height: 46px;
+  }
+
+  .hero-pet-title {
+    font-size: 1.5rem !important;
+  }
+
+  .paw-focal-art-frame {
+    height: clamp(260px, 55vh, 360px);
+    width: clamp(240px, 55vh, 360px);
+  }
+
+  .paw-decor-item {
+    transform: scale(0.72);
+  }
+}
+

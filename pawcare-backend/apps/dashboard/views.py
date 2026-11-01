@@ -35,6 +35,11 @@ class DashboardView(APIView):
                 'id': str(pet.id),
                 'name': pet.name,
                 'species': pet.species,
+                'breed': pet.breed,
+                'gender': pet.gender,
+                'weight': pet.weight,
+                'date_of_birth': str(pet.date_of_birth) if pet.date_of_birth else None,
+                'estimated_age': pet.estimated_age,
                 'has_photo': bool(pet.photo_key),
                 'photo_url': request.build_absolute_uri(f'/api/pets/{pet.id}/photo/serve/')
                              if pet.photo_key else None,
