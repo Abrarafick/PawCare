@@ -107,11 +107,8 @@ export const DashboardPage: React.FC = () => {
 
       {/* Pet Selection Categories Row (Inspired by "Categories: All, Cats, Dog, Birds" in the reference) */}
       <div style={{ marginBottom: '1.75rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+        <div style={{ marginBottom: '0.5rem' }}>
           <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>Your Pets</span>
-          <Link to="/pets/new" style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)' }}>
-            + Add Another
-          </Link>
         </div>
 
         <div className="category-pills-row">

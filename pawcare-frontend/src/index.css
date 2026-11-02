@@ -35,11 +35,16 @@
   --text-muted: #6b7a67;
   --text-soft: #8e9e8a;
 
-  /* Universal Soft Hover Highlight Glow */
-  --hover-highlight-glow: rgba(154, 217, 113, 0.2);
-  --hover-highlight-border: rgba(154, 217, 113, 0.45);
-  --hover-cat-glow: rgba(246, 220, 121, 0.25);
-  --hover-cat-border: rgba(246, 220, 121, 0.55);
+  /* Universal Dynamic Theme Variables (Default / Dog Theme: Soft Mint) */
+  --theme-primary: var(--dog-color);
+  --theme-primary-hover: var(--dog-color-hover);
+  --theme-primary-dark: var(--dog-color-dark);
+  --theme-primary-light: var(--dog-color-light);
+  --theme-primary-subtle: var(--dog-color-subtle);
+  --theme-glow: var(--dog-glow);
+  --theme-hover-border: rgba(154, 217, 113, 0.55);
+  --theme-hover-glow: rgba(154, 217, 113, 0.24);
+  --theme-focus-ring: rgba(154, 217, 113, 0.28);
 
   /* Healthcare Status Accents */
   --status-upcoming-bg: #ebf7e2;
@@ -51,16 +56,35 @@
   --status-completed-bg: #dcfce7;
   --status-completed-text: #15803d;
 
-  --radius-xs: 8px;
-  --radius-sm: 14px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
-  --radius-xl: 36px;
+  /* Smooth Rounded Radii for Tactile Clay Shapes */
+  --radius-xs: 10px;
+  --radius-sm: 16px;
+  --radius-md: 22px;
+  --radius-lg: 30px;
+  --radius-xl: 38px;
   --radius-full: 9999px;
 
-  --shadow-card: 0 10px 30px rgba(20, 28, 19, 0.04);
-  --shadow-float: 0 14px 40px rgba(20, 28, 19, 0.08);
-  --shadow-btn: 0 4px 14px rgba(154, 217, 113, 0.35);
+  /* =========================================================================
+     Claymorphism Design Tokens (Default / Dog Theme: Mint Green)
+     Soft molded surfaces with 3D inner specular highlights & tinted outer drop shadows
+     ========================================================================= */
+  --clay-card-bg: #ffffff;
+  --clay-shadow-outer: 0 14px 32px rgba(45, 95, 30, 0.09), 0 4px 10px rgba(154, 217, 113, 0.14);
+  --clay-shadow-hover: 0 18px 40px rgba(45, 95, 30, 0.13), 0 6px 14px rgba(154, 217, 113, 0.22);
+  --clay-shadow-inset: inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.95), inset -3px -3px 6px rgba(40, 80, 25, 0.06);
+  --clay-shadow-pressed: inset 3px 3px 7px rgba(40, 80, 25, 0.18), inset -2px -2px 4px rgba(255, 255, 255, 0.6);
+
+  --clay-btn-shadow: 0 8px 22px var(--theme-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.75), inset -2px -3px 5px rgba(35, 70, 20, 0.14);
+  --clay-btn-hover-shadow: 0 12px 28px var(--theme-glow), inset 2px 2px 5px rgba(255, 255, 255, 0.9), inset -2px -3px 6px rgba(35, 70, 20, 0.16);
+  --clay-btn-active-shadow: 0 2px 6px var(--theme-glow), inset 3px 3px 6px rgba(25, 55, 15, 0.22), inset -2px -2px 4px rgba(255, 255, 255, 0.45);
+
+  --clay-input-bg: #fbfdfa;
+  --clay-input-shadow: inset 2.5px 3px 6px rgba(40, 75, 25, 0.07), inset -2px -2px 4px rgba(255, 255, 255, 0.95);
+  --clay-input-focus-shadow: inset 2px 2.5px 5px rgba(40, 75, 25, 0.08), 0 0 0 4px var(--theme-focus-ring);
+
+  --shadow-card: var(--clay-shadow-outer), var(--clay-shadow-inset);
+  --shadow-float: var(--clay-shadow-hover), var(--clay-shadow-inset);
+  --shadow-btn: var(--clay-btn-shadow);
 
   --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --transition-smooth: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -122,17 +146,22 @@ button, input, select, textarea {
   z-index: 10;
 }
 
-/* Header & Navbar */
+/* Header & Navbar - Elevated Clay Slab with Translucent Specular Border */
 .paw-navbar {
-  background: rgba(248, 250, 246, 0.85);
+  background: rgba(248, 250, 246, 0.9);
   position: sticky;
   top: 0;
   z-index: 40;
   padding: 0.85rem 1.25rem;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(230, 237, 226, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 24px var(--clay-shadow-outer);
   transition: var(--transition-smooth);
+}
+
+.theme-cat .paw-navbar {
+  background: rgba(254, 252, 246, 0.9);
 }
 
 .paw-navbar-inner {
@@ -149,14 +178,16 @@ button, input, select, textarea {
   gap: 0.85rem;
 }
 
+/* Clay User Badge */
 .paw-user-badge {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 0.9rem;
-  background: var(--bg-card);
+  padding: 0.45rem 1rem;
+  background: var(--clay-card-bg);
   border-radius: var(--radius-full);
-  border: 1px solid var(--border-light);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 14px var(--clay-shadow-outer), var(--clay-shadow-inset);
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-main);
@@ -164,14 +195,15 @@ button, input, select, textarea {
 }
 
 .paw-user-avatar {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: var(--mint-light);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--mint-dark);
+  box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.8), inset -1px -1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .brand-badge {
@@ -188,62 +220,72 @@ button, input, select, textarea {
 }
 
 .brand-badge:hover {
-  background: var(--mint-subtle);
-  box-shadow: 0 4px 14px var(--hover-highlight-glow);
+  background: var(--theme-primary-subtle);
+  box-shadow: 0 4px 14px var(--theme-hover-glow);
 }
 
 .paw-user-badge:hover {
-  background: var(--mint-subtle);
-  border-color: var(--hover-highlight-border);
-  box-shadow: 0 4px 14px var(--hover-highlight-glow);
+  background: var(--theme-primary-subtle);
+  border-color: var(--theme-hover-border);
+  box-shadow: 0 8px 18px var(--theme-hover-glow), var(--clay-shadow-inset);
+  transform: translateY(-1px);
 }
 
+/* Claymorphic Brand Bubble */
 .brand-icon-bubble {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-full);
-  background: var(--mint);
+  background: var(--theme-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--mint-dark);
+  color: var(--theme-primary-dark);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 14px var(--theme-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.75), inset -2px -2px 4px rgba(0, 0, 0, 0.12);
   transition: var(--transition-smooth);
 }
 
 .brand-badge:hover .brand-icon-bubble {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
-/* Circular Buttons with Subtle Hover Effect */
+/* Claymorphic Circular Buttons with Raised/Pressed States */
 .btn-circle {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-full);
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  background: var(--clay-card-bg);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-main);
   cursor: pointer;
-  transition: var(--transition-smooth);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 6px 16px var(--clay-shadow-outer), var(--clay-shadow-inset);
   position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-circle:hover {
-  background: var(--mint-subtle);
-  border-color: var(--hover-highlight-border);
-  box-shadow: 0 6px 18px var(--hover-highlight-glow), 0 0 0 2px rgba(154, 217, 113, 0.15);
-  transform: translateY(-1px);
-  color: var(--mint-dark);
+  background: var(--theme-primary-subtle);
+  border-color: var(--theme-hover-border);
+  box-shadow: 0 10px 22px var(--theme-hover-glow), var(--clay-shadow-inset);
+  transform: translateY(-2px);
+  color: var(--theme-primary-dark);
 }
 
 .btn-circle:active {
-  transform: translateY(0);
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px var(--clay-shadow-outer), var(--clay-shadow-pressed);
 }
 
-/* Pill Buttons with Subtle Hover Highlights */
+/* ==========================================================================
+   Claymorphic Buttons & Interactive Controls
+   Tactile, soft molded clay with raised, hovered, and pressed-in states
+   ========================================================================== */
 .btn-pill {
   display: inline-flex;
   align-items: center;
@@ -253,78 +295,103 @@ button, input, select, textarea {
   border-radius: var(--radius-full);
   font-size: 0.95rem;
   font-weight: 700;
-  border: 1px solid transparent;
   cursor: pointer;
-  transition: var(--transition-smooth);
+  transition: all 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
   white-space: nowrap;
   position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* Primary Clay Button (Raised Molded Clay with Specular Highlight) */
 .btn-pill-primary {
-  background: var(--mint);
-  color: var(--mint-dark);
-  box-shadow: var(--shadow-btn);
+  background: var(--theme-primary);
+  color: var(--theme-primary-dark);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  box-shadow: var(--clay-btn-shadow);
 }
 
 .btn-pill-primary:hover {
-  background: var(--mint-hover);
-  transform: translateY(-1.5px);
-  box-shadow: 0 8px 22px rgba(154, 217, 113, 0.42), 0 0 0 3px rgba(154, 217, 113, 0.2);
+  background: var(--theme-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--clay-btn-hover-shadow);
 }
 
+/* Pressed-in Clay Effect on Click */
+.btn-pill-primary:active {
+  transform: translateY(1px);
+  box-shadow: var(--clay-btn-active-shadow);
+}
+
+/* Secondary Clay Button (Soft White/Cream Clay) */
 .btn-pill-secondary {
-  background: var(--bg-card);
+  background: var(--clay-card-bg);
   color: var(--text-main);
-  border: 1px solid var(--border-light);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 6px 18px var(--clay-shadow-outer), var(--clay-shadow-inset);
 }
 
 .btn-pill-secondary:hover {
-  background: var(--mint-subtle);
-  border-color: var(--hover-highlight-border);
-  color: var(--mint-dark);
-  box-shadow: 0 6px 18px var(--hover-highlight-glow), 0 0 0 2px rgba(154, 217, 113, 0.12);
-  transform: translateY(-1.5px);
+  background: var(--theme-primary-subtle);
+  border-color: var(--theme-hover-border);
+  color: var(--theme-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px var(--theme-hover-glow), var(--clay-shadow-inset);
 }
 
+.btn-pill-secondary:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px var(--clay-shadow-outer), var(--clay-shadow-pressed);
+}
+
+/* Danger Clay Button (Soft Molded Coral/Rose) */
 .btn-pill-danger {
-  background: var(--status-overdue-bg);
-  color: var(--status-overdue-text);
-  border: 1px solid rgba(220, 38, 38, 0.15);
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.15), inset 2px 2px 4px rgba(255, 255, 255, 0.9), inset -2px -2px 4px rgba(220, 38, 38, 0.12);
 }
 
 .btn-pill-danger:hover {
   background: #fca5a5;
-  color: #991b1b;
-  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.2);
-  transform: translateY(-1.5px);
+  color: #7f1d1d;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(220, 38, 38, 0.25), inset 2px 2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.btn-pill-danger:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2), inset 3px 3px 6px rgba(185, 28, 28, 0.25);
 }
 
 .btn-pill-sm {
-  padding: 0.5rem 1.1rem;
+  padding: 0.5rem 1.15rem;
   font-size: 0.85rem;
 }
 
 .btn-pill:disabled {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
   transform: none !important;
   box-shadow: none !important;
 }
 
-/* Rounded Cards with Subtle Hover Highlights */
+/* ==========================================================================
+   Claymorphic Cards & Containers
+   Inflated, soft molded surfaces with dual-layer shadows & inner highlights
+   ========================================================================== */
 .paw-card {
-  background: var(--bg-card);
+  background: var(--clay-card-bg);
   border-radius: var(--radius-lg);
   padding: 1.75rem;
-  box-shadow: var(--shadow-card);
-  border: 1px solid var(--border-subtle);
-  transition: var(--transition-smooth);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inset);
+  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .paw-card:hover {
-  box-shadow: var(--shadow-float), 0 0 0 1px var(--hover-highlight-border);
-  border-color: var(--hover-highlight-border);
+  box-shadow: var(--clay-shadow-hover), var(--clay-shadow-inset), 0 0 0 1px var(--theme-hover-border);
+  border-color: var(--theme-hover-border);
   transform: translateY(-2px);
 }
 
@@ -332,12 +399,20 @@ a.paw-card:hover,
 button.paw-card:hover,
 .paw-card[style*="cursor: pointer"]:hover,
 .paw-card[style*="cursor:pointer"]:hover {
-  box-shadow: 0 14px 32px var(--hover-highlight-glow), 0 0 0 1.5px var(--hover-highlight-border);
-  border-color: var(--hover-highlight-border);
+  box-shadow: var(--clay-shadow-hover), var(--clay-shadow-inset), 0 0 0 1.5px var(--theme-hover-border);
+  border-color: var(--theme-hover-border);
   transform: translateY(-2px);
 }
 
-/* Mint Hero Card for Dogs */
+a.paw-card:active,
+button.paw-card:active,
+.paw-card[style*="cursor: pointer"]:active,
+.paw-card[style*="cursor:pointer"]:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px var(--clay-shadow-outer), var(--clay-shadow-pressed);
+}
+
+/* Mint Hero Card for Dogs (Tactile Molded Mint Clay) */
 .hero-pet-card {
   border-radius: var(--radius-xl);
   padding: 2rem;
@@ -345,28 +420,32 @@ button.paw-card:hover,
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: var(--transition-smooth);
+  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-pet-card-dog {
   background: var(--dog-color);
   color: var(--dog-color-dark);
-  box-shadow: 0 16px 36px var(--dog-glow);
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 18px 40px var(--dog-glow), 0 6px 14px rgba(45, 95, 30, 0.12), inset 3px 3px 6px rgba(255, 255, 255, 0.8), inset -3px -4px 7px rgba(35, 75, 20, 0.12);
 }
 
 .hero-pet-card-dog:hover {
-  box-shadow: 0 20px 42px rgba(154, 217, 113, 0.42);
+  box-shadow: 0 22px 48px rgba(154, 217, 113, 0.48), 0 8px 18px rgba(45, 95, 30, 0.15), inset 3px 3px 6px rgba(255, 255, 255, 0.85), inset -3px -4px 7px rgba(35, 75, 20, 0.12);
+  transform: translateY(-2px);
 }
 
-/* Pastel Yellow Hero Card for Cats */
+/* Pastel Yellow Hero Card for Cats (Tactile Molded Honey/Butter Clay) */
 .hero-pet-card-cat {
   background: var(--cat-color);
   color: var(--cat-color-dark);
-  box-shadow: 0 16px 36px var(--cat-glow);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 18px 40px var(--cat-glow), 0 6px 14px rgba(140, 100, 15, 0.14), inset 3px 3px 6px rgba(255, 255, 255, 0.85), inset -3px -4px 7px rgba(110, 80, 10, 0.12);
 }
 
 .hero-pet-card-cat:hover {
-  box-shadow: 0 20px 42px rgba(246, 220, 121, 0.45);
+  box-shadow: 0 22px 48px rgba(246, 220, 121, 0.52), 0 8px 18px rgba(140, 100, 15, 0.18), inset 3px 3px 6px rgba(255, 255, 255, 0.9), inset -3px -4px 7px rgba(110, 80, 10, 0.12);
+  transform: translateY(-2px);
 }
 
 /* Home Pet Introduction Dual Section Grid (Mobile-First) */
@@ -386,20 +465,20 @@ button.paw-card:hover,
 
 /* Next Vaccination Card (Right Side in Hero Intro) */
 .home-next-vax-card {
-  background: var(--bg-card);
+  background: var(--clay-card-bg);
   border-radius: var(--radius-xl);
   padding: 1.6rem;
-  box-shadow: var(--shadow-card);
-  border: 1.5px solid var(--border-light);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inset);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: var(--transition-smooth);
+  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .home-next-vax-card:hover {
-  box-shadow: var(--shadow-float), 0 0 0 1px var(--hover-highlight-border);
-  border-color: var(--hover-highlight-border);
+  box-shadow: var(--clay-shadow-hover), var(--clay-shadow-inset), 0 0 0 1px var(--theme-hover-border);
+  border-color: var(--theme-hover-border);
   transform: translateY(-2px);
 }
 
@@ -418,23 +497,28 @@ button.paw-card:hover,
 }
 
 .quick-care-card {
-  background: var(--bg-card);
+  background: var(--clay-card-bg);
   border-radius: var(--radius-lg);
   padding: 1.2rem 1.35rem;
-  box-shadow: var(--shadow-card);
-  border: 1px solid var(--border-subtle);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inset);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   cursor: pointer;
-  transition: var(--transition-smooth);
+  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .quick-care-card:hover {
-  box-shadow: 0 10px 28px var(--hover-highlight-glow), 0 0 0 1.5px var(--hover-highlight-border);
-  border-color: var(--hover-highlight-border);
+  box-shadow: var(--clay-shadow-hover), var(--clay-shadow-inset), 0 0 0 1.5px var(--theme-hover-border);
+  border-color: var(--theme-hover-border);
   transform: translateY(-2px);
+}
+
+.quick-care-card:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px var(--clay-shadow-outer), var(--clay-shadow-pressed);
 }
 
 @media (min-width: 768px) {
@@ -489,7 +573,7 @@ button.paw-card:hover,
   margin-bottom: 0.5rem;
 }
 
-/* Stat Chips (Gender, Age, Weight) */
+/* Stat Chips (Gender, Age, Weight) - Clay Inset Tablets */
 .stat-chips-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -498,19 +582,20 @@ button.paw-card:hover,
 }
 
 .stat-chip {
-  background: var(--bg-chip);
+  background: var(--clay-card-bg);
   border-radius: var(--radius-md);
   padding: 0.85rem 1rem;
   text-align: center;
-  border: 1px solid var(--border-subtle);
-  transition: var(--transition-smooth);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 6px 16px var(--clay-shadow-outer), var(--clay-shadow-inset);
+  transition: all 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .stat-chip:hover {
-  background: #ffffff;
-  border-color: var(--hover-highlight-border);
-  box-shadow: 0 4px 14px var(--hover-highlight-glow);
-  transform: translateY(-1px);
+  background: var(--theme-primary-subtle);
+  border-color: var(--theme-hover-border);
+  box-shadow: 0 10px 22px var(--theme-hover-glow), var(--clay-shadow-inset);
+  transform: translateY(-1.5px);
 }
 
 .stat-chip-label {
@@ -527,13 +612,13 @@ button.paw-card:hover,
   color: var(--text-main);
 }
 
-/* Pet Category Pills Carousel */
+/* Pet Category Pills Carousel - Soft Molded Clay Pills */
 .category-pills-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
   overflow-x: auto;
-  padding: 0.5rem 0.25rem 1.25rem 0.25rem;
+  padding: 0.6rem 0.35rem 1.35rem 0.35rem;
   scrollbar-width: none;
 }
 
@@ -544,58 +629,56 @@ button.paw-card:hover,
 .pet-category-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 1.25rem;
+  gap: 0.65rem;
+  padding: 0.65rem 1.35rem;
   border-radius: var(--radius-full);
-  background: var(--bg-card);
-  border: 1.5px solid var(--border-light);
+  background: var(--clay-card-bg);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
-  transition: var(--transition-smooth);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: all 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 6px 16px var(--clay-shadow-outer), var(--clay-shadow-inset);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Subtle Hover Effect for Dog / Standard Pills */
+/* Dynamic Hover Effect for Category Pills */
 .pet-category-pill:hover {
-  background: var(--mint-subtle);
-  color: var(--mint-dark);
-  border-color: var(--hover-highlight-border);
-  box-shadow: 0 6px 18px var(--hover-highlight-glow), 0 0 0 2px rgba(154, 217, 113, 0.15);
-  transform: translateY(-1.5px);
+  background: var(--theme-primary-subtle);
+  color: var(--theme-primary-dark);
+  border-color: var(--theme-hover-border);
+  box-shadow: 0 10px 24px var(--theme-hover-glow), var(--clay-shadow-inset);
+  transform: translateY(-2px);
 }
 
-/* Subtle Hover Effect for Cat Pills */
-.pet-category-pill-cat:hover {
-  background: var(--cat-color-subtle);
-  color: var(--cat-color-dark);
-  border-color: var(--hover-cat-border);
-  box-shadow: 0 6px 18px var(--hover-cat-glow), 0 0 0 2px rgba(246, 220, 121, 0.2);
-  transform: translateY(-1.5px);
+.pet-category-pill:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px var(--clay-shadow-outer), var(--clay-shadow-pressed);
 }
 
-/* Active Dog Pill (Soft Mint-Green) */
+/* Active Dog Pill (Soft Mint Clay) */
 .pet-category-pill.active-dog,
 .pet-category-pill.active {
   background: var(--dog-color);
-  border-color: var(--dog-color);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
   color: var(--dog-color-dark);
-  box-shadow: 0 6px 18px var(--dog-glow);
+  box-shadow: 0 8px 22px var(--dog-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.75), inset -2px -3px 5px rgba(35, 70, 20, 0.12);
 }
 
-/* Active Cat Pill (Soft Pastel Yellow) */
+/* Active Cat Pill (Soft Butter-Yellow Clay) */
 .pet-category-pill.active-cat {
   background: var(--cat-color);
-  border-color: var(--cat-color);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
   color: var(--cat-color-dark);
-  box-shadow: 0 6px 18px var(--cat-glow);
+  box-shadow: 0 8px 22px var(--cat-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.8), inset -2px -3px 5px rgba(110, 80, 10, 0.12);
 }
 
 .pet-category-pill-avatar {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   object-fit: cover;
   background: white;
@@ -603,59 +686,69 @@ button.paw-card:hover,
   align-items: center;
   justify-content: center;
   font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), inset 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
-/* Navigation Tabs (Overview, Reminders, Vault, History) */
+/* Navigation Tabs (Overview, Reminders, Vault, History) - Clay Tabs */
 .sub-nav-tabs {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.65rem;
   overflow-x: auto;
   margin-bottom: 1.75rem;
-  padding-bottom: 0.25rem;
+  padding-bottom: 0.35rem;
 }
 
 .sub-nav-tab {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.7rem 1.35rem;
+  padding: 0.75rem 1.45rem;
   border-radius: var(--radius-full);
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  background: var(--clay-card-bg);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
-  transition: var(--transition-smooth);
+  box-shadow: 0 6px 16px var(--clay-shadow-outer), var(--clay-shadow-inset);
+  transition: all 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
 }
 
 .sub-nav-tab:hover {
-  color: var(--mint-dark);
-  background: var(--mint-subtle);
-  border-color: var(--hover-highlight-border);
-  box-shadow: 0 6px 16px var(--hover-highlight-glow), 0 0 0 2px rgba(154, 217, 113, 0.14);
-  transform: translateY(-1px);
+  color: var(--theme-primary-dark);
+  background: var(--theme-primary-subtle);
+  border-color: var(--theme-hover-border);
+  box-shadow: 0 10px 22px var(--theme-hover-glow), var(--clay-shadow-inset);
+  transform: translateY(-1.5px);
+}
+
+.sub-nav-tab:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px var(--clay-shadow-outer), var(--clay-shadow-pressed);
 }
 
 .sub-nav-tab.active {
   background: var(--text-main);
   color: #ffffff;
-  border-color: var(--text-main);
-  box-shadow: 0 4px 14px rgba(20, 28, 19, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(20, 28, 19, 0.25), inset 2px 2px 4px rgba(255, 255, 255, 0.35), inset -2px -3px 5px rgba(0, 0, 0, 0.35);
 }
 
-/* Status Badges */
+/* Status Badges - Soft Molded Micro-Clay Pills */
 .status-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.3rem 0.8rem;
+  padding: 0.35rem 0.9rem;
   border-radius: var(--radius-full);
   font-size: 0.775rem;
   font-weight: 700;
   text-transform: capitalize;
   letter-spacing: 0.01em;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.75), inset -1.5px -1.5px 3px rgba(0, 0, 0, 0.04);
   transition: var(--transition-smooth);
 }
 
@@ -679,7 +772,7 @@ button.paw-card:hover,
   color: var(--status-completed-text);
 }
 
-/* Form Styling */
+/* Clay Form Inputs with Inset Molded Depth */
 .paw-input-group {
   margin-bottom: 1.35rem;
 }
@@ -694,25 +787,25 @@ button.paw-card:hover,
 
 .paw-input, .paw-select, .paw-textarea {
   width: 100%;
-  padding: 0.8rem 1.15rem;
+  padding: 0.85rem 1.25rem;
   font-size: 0.95rem;
   font-weight: 500;
   border-radius: var(--radius-md);
   border: 1.5px solid var(--border-light);
-  background: var(--bg-card);
+  background: var(--clay-input-bg);
   color: var(--text-main);
+  box-shadow: var(--clay-input-shadow);
   transition: var(--transition-smooth);
 }
 
 .paw-input:hover, .paw-select:hover, .paw-textarea:hover {
-  border-color: var(--hover-highlight-border);
-  box-shadow: 0 2px 8px var(--hover-highlight-glow);
+  border-color: var(--theme-hover-border);
 }
 
 .paw-input:focus, .paw-select:focus, .paw-textarea:focus {
   outline: none;
-  border-color: var(--mint);
-  box-shadow: 0 0 0 4px rgba(154, 217, 113, 0.25);
+  border-color: var(--theme-primary);
+  box-shadow: var(--clay-input-focus-shadow);
   background: #ffffff;
 }
 
@@ -722,84 +815,103 @@ button.paw-card:hover,
   margin-top: 0.35rem;
 }
 
-/* Pill Radio Checkboxes with Species Accents */
+/* Claymorphic Pill Radios with Tactile Raised / Pressed Indentation */
 .pill-radio-group {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.65rem;
   flex-wrap: wrap;
 }
 
 .pill-radio-btn {
-  padding: 0.55rem 1.2rem;
+  padding: 0.6rem 1.35rem;
   border-radius: var(--radius-full);
-  background: var(--bg-chip);
-  border: 1.5px solid transparent;
+  background: var(--clay-card-bg);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
   font-weight: 700;
   font-size: 0.875rem;
   color: var(--text-muted);
   cursor: pointer;
-  transition: var(--transition-smooth);
+  box-shadow: 0 4px 12px var(--clay-shadow-outer), var(--clay-shadow-inset);
+  transition: all 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
 }
 
 .pill-radio-btn:hover {
-  background: var(--bg-chip-hover);
-  border-color: var(--hover-highlight-border);
-  box-shadow: 0 4px 12px var(--hover-highlight-glow);
+  background: var(--theme-primary-subtle);
+  border-color: var(--theme-hover-border);
+  box-shadow: 0 8px 18px var(--theme-hover-glow), var(--clay-shadow-inset);
+  color: var(--theme-primary-dark);
+  transform: translateY(-1.5px);
+}
+
+.pill-radio-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px var(--clay-shadow-outer), var(--clay-shadow-pressed);
+}
+
+/* Dynamic Active Option matching active theme */
+.pill-radio-btn.active {
+  background: var(--theme-primary);
+  color: var(--theme-primary-dark);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 18px var(--theme-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.75), inset -2px -3px 4px rgba(0, 0, 0, 0.12);
 }
 
 /* Dog active option: soft mint green */
 .pill-radio-btn.active-dog {
   background: var(--dog-color);
   color: var(--dog-color-dark);
-  border-color: var(--dog-color);
-  box-shadow: 0 4px 14px var(--dog-glow);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 18px var(--dog-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.75), inset -2px -3px 4px rgba(35, 70, 20, 0.12);
 }
 
 /* Cat active option: soft pastel yellow */
 .pill-radio-btn.active-cat {
   background: var(--cat-color);
   color: var(--cat-color-dark);
-  border-color: var(--cat-color);
-  box-shadow: 0 4px 14px var(--cat-glow);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 6px 18px var(--cat-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.8), inset -2px -3px 4px rgba(110, 80, 10, 0.12);
 }
 
-/* Alerts */
+/* Alerts - Tactile Molded Message Tablets */
 .paw-alert {
   border-radius: var(--radius-md);
-  padding: 1.1rem 1.35rem;
+  padding: 1.15rem 1.45rem;
   display: flex;
   align-items: center;
   gap: 0.85rem;
   font-size: 0.925rem;
   margin-bottom: 1.5rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04), inset 2px 2px 4px rgba(255, 255, 255, 0.85), inset -2px -2px 4px rgba(0, 0, 0, 0.04);
   transition: var(--transition-smooth);
 }
 
 .paw-alert-overdue {
   background: var(--status-overdue-bg);
   color: var(--status-overdue-text);
-  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-color: rgba(254, 202, 202, 0.8);
 }
 
 .paw-alert-warning {
   background: var(--status-duesoon-bg);
   color: var(--status-duesoon-text);
-  border: 1px solid rgba(180, 83, 9, 0.2);
+  border-color: rgba(253, 230, 138, 0.8);
 }
 
 .paw-alert-success {
   background: var(--status-completed-bg);
   color: var(--status-completed-text);
-  border: 1px solid rgba(21, 128, 61, 0.2);
+  border-color: rgba(187, 247, 208, 0.8);
 }
 
-/* Modals */
+/* Modals - Inflated Floating Clay Vault */
 .paw-modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(20, 28, 19, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -808,14 +920,15 @@ button.paw-card:hover,
 }
 
 .paw-modal-card {
-  background: var(--bg-card);
+  background: #ffffff;
   border-radius: var(--radius-xl);
   max-width: 540px;
   width: 100%;
   max-height: 88vh;
   overflow-y: auto;
-  padding: 2rem;
-  box-shadow: var(--shadow-float);
+  padding: 2.2rem;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 24px 60px var(--clay-shadow-outer), 0 8px 24px rgba(0, 0, 0, 0.08), inset 3px 3px 6px rgba(255, 255, 255, 0.95), inset -3px -4px 7px var(--clay-shadow-inset);
   position: relative;
 }
 
@@ -858,13 +971,14 @@ button.paw-card:hover,
   }
 }
 
-/* Empty States */
+/* Empty States - Tactile Molded Inset Well */
 .paw-empty-state {
   text-align: center;
   padding: 3.5rem 1.5rem;
-  background: var(--bg-card);
+  background: var(--clay-card-bg);
   border-radius: var(--radius-xl);
-  border: 2px dashed var(--border-light);
+  border: 2.5px dashed var(--theme-hover-border);
+  box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inset);
 }
 
 .paw-empty-emoji {
@@ -873,7 +987,8 @@ button.paw-card:hover,
 }
 
 /* ==========================================================================
-   Floating Pill Bottom Navigation Bar (Matched to reference image)
+   Claymorphic Floating Bottom Navigation Bar
+   Soft elevated white clay surface with tactile sliding indicator bubble
    ========================================================================== */
 .paw-floating-bottom-nav {
   position: fixed;
@@ -882,13 +997,11 @@ button.paw-card:hover,
   transform: translateX(-50%);
   z-index: 50;
   width: min(320px, calc(100vw - 2rem));
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: #ffffff;
   border-radius: var(--radius-full);
-  padding: 0.35rem 0.5rem;
-  box-shadow: 0 12px 36px rgba(20, 28, 19, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(220, 230, 215, 0.85);
+  padding: 0.4rem 0.55rem;
+  box-shadow: 0 18px 44px var(--clay-shadow-outer), 0 4px 12px rgba(0, 0, 0, 0.04), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.95), inset -2.5px -3px 6px var(--clay-shadow-inset);
+  border: 2px solid rgba(255, 255, 255, 0.95);
   user-select: none;
 }
 
@@ -916,73 +1029,61 @@ button.paw-card:hover,
   will-change: transform;
 }
 
+/* Dynamic Bottom Navigation Slider Bubble (Raised Molded Clay Bead) */
 .bottom-nav-slider-bubble {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--mint);
-  box-shadow: 0 4px 16px rgba(154, 217, 113, 0.5);
+  background: var(--theme-primary);
+  box-shadow: 0 6px 18px var(--theme-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.75), inset -2px -3px 5px rgba(0, 0, 0, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
   transition: background 300ms ease, box-shadow 300ms ease;
 }
 
 /* ==========================================================================
-   Cat Theme Color Propagation (Logo, Navigation Bar, Add New Pet Button & Accents)
+   Dynamic Theme Color Overrides (Dog: Soft Mint, Cat: Pastel Yellow)
    ========================================================================== */
-.theme-cat .brand-icon-bubble {
-  background: var(--cat-color) !important;
-  color: var(--cat-color-dark) !important;
-  box-shadow: 0 4px 14px var(--cat-glow);
-}
+.theme-cat {
+  --theme-primary: var(--cat-color) !important;
+  --theme-primary-hover: var(--cat-color-hover) !important;
+  --theme-primary-dark: var(--cat-color-dark) !important;
+  --theme-primary-light: var(--cat-color-light) !important;
+  --theme-primary-subtle: var(--cat-color-subtle) !important;
+  --theme-glow: var(--cat-glow) !important;
+  --theme-hover-border: rgba(220, 185, 45, 0.65) !important;
+  --theme-hover-glow: rgba(246, 220, 121, 0.35) !important;
+  --theme-focus-ring: rgba(246, 220, 121, 0.38) !important;
 
-.theme-cat .paw-user-avatar {
-  background: var(--cat-color-light) !important;
-  color: var(--cat-color-dark) !important;
-}
+  /* Cat Clay Shadows (Warm Amber / Butter Clay) */
+  --clay-shadow-outer: 0 14px 32px rgba(140, 100, 15, 0.11), 0 4px 10px rgba(246, 220, 121, 0.22) !important;
+  --clay-shadow-hover: 0 18px 40px rgba(140, 100, 15, 0.15), 0 6px 14px rgba(246, 220, 121, 0.32) !important;
+  --clay-shadow-inset: inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.95), inset -3px -3px 6px rgba(130, 95, 15, 0.07) !important;
+  --clay-shadow-pressed: inset 3px 3px 7px rgba(130, 95, 15, 0.18), inset -2px -2px 4px rgba(255, 255, 255, 0.6) !important;
 
-.theme-cat .btn-pill-primary {
-  background: var(--cat-color) !important;
-  color: var(--cat-color-dark) !important;
-  box-shadow: 0 4px 14px var(--cat-glow) !important;
-}
+  --clay-btn-shadow: 0 8px 22px var(--cat-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.8), inset -2px -3px 5px rgba(110, 80, 10, 0.14) !important;
+  --clay-btn-hover-shadow: 0 12px 28px var(--cat-glow), inset 2px 2px 5px rgba(255, 255, 255, 0.95), inset -2px -3px 6px rgba(110, 80, 10, 0.16) !important;
+  --clay-btn-active-shadow: 0 2px 6px var(--cat-glow), inset 3px 3px 6px rgba(100, 70, 10, 0.22), inset -2px -2px 4px rgba(255, 255, 255, 0.5) !important;
 
-.theme-cat .btn-pill-primary:hover {
-  background: var(--cat-color-hover) !important;
-  box-shadow: 0 8px 22px rgba(246, 220, 121, 0.48), 0 0 0 3px rgba(246, 220, 121, 0.22) !important;
-}
-
-.theme-cat .bottom-nav-slider-bubble {
-  background: var(--cat-color) !important;
-  box-shadow: 0 4px 16px var(--cat-glow) !important;
+  --clay-input-bg: #fffdf7 !important;
+  --clay-input-shadow: inset 2.5px 3px 6px rgba(120, 90, 15, 0.07), inset -2px -2px 4px rgba(255, 255, 255, 0.95) !important;
 }
 
 .theme-cat .paw-floating-bottom-nav {
-  border-color: rgba(246, 220, 121, 0.35);
-  box-shadow: 0 12px 36px var(--cat-glow), 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 44px var(--clay-shadow-outer), 0 4px 12px rgba(0, 0, 0, 0.04), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.95), inset -2.5px -3px 6px var(--clay-shadow-inset);
 }
 
-.theme-cat .brand-badge:hover {
-  background: var(--cat-color-subtle);
-  box-shadow: 0 4px 14px var(--cat-glow);
-}
-
-.theme-cat .paw-user-badge:hover {
-  background: var(--cat-color-subtle);
-  border-color: var(--hover-cat-border);
-  box-shadow: 0 4px 14px var(--cat-glow);
-}
-
-.theme-cat .btn-circle:hover {
-  background: var(--cat-color-subtle);
-  border-color: var(--hover-cat-border);
-  box-shadow: 0 6px 18px var(--cat-glow), 0 0 0 2px rgba(246, 220, 121, 0.18);
-  color: var(--cat-color-dark);
-}
-
-.theme-cat .btn-pill-secondary:hover {
-  background: var(--cat-color-subtle);
-  border-color: var(--hover-cat-border);
-  color: var(--cat-color-dark);
-  box-shadow: 0 6px 18px var(--cat-glow);
+.theme-dog,
+.theme-neutral {
+  --theme-primary: var(--dog-color);
+  --theme-primary-hover: var(--dog-color-hover);
+  --theme-primary-dark: var(--dog-color-dark);
+  --theme-primary-light: var(--dog-color-light);
+  --theme-primary-subtle: var(--dog-color-subtle);
+  --theme-glow: var(--dog-glow);
+  --theme-hover-border: rgba(154, 217, 113, 0.55);
+  --theme-hover-glow: rgba(154, 217, 113, 0.24);
+  --theme-focus-ring: rgba(154, 217, 113, 0.28);
 }
 
 /* Individual Slot Buttons */
@@ -1002,19 +1103,26 @@ button.paw-card:hover,
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Inactive Light-Grey Circular Background */
+/* Inactive Light-Grey Circular Background (Inset Clay Well) */
 .bottom-nav-slot-bg {
   position: absolute;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #edf2ea;
+  background: #edf3ea;
   z-index: 1;
-  transition: background 250ms ease, transform 250ms ease;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.05), inset -2px -2px 4px rgba(255, 255, 255, 0.9);
+  transition: background 250ms ease, transform 250ms ease, box-shadow 250ms ease;
+}
+
+.theme-cat .bottom-nav-slot-bg {
+  background: #fbf5e4;
+  box-shadow: inset 2px 2px 4px rgba(120, 90, 15, 0.06), inset -2px -2px 4px rgba(255, 255, 255, 0.9);
 }
 
 .bottom-nav-slot-btn:hover .bottom-nav-slot-bg {
-  background: #e3ece0;
+  background: var(--theme-primary-subtle);
+  box-shadow: 0 0 0 2px var(--theme-hover-border), inset 1.5px 1.5px 3px rgba(0, 0, 0, 0.04);
   transform: scale(1.04);
 }
 
@@ -1039,7 +1147,31 @@ button.paw-card:hover,
 }
 
 .bottom-nav-slot-btn:hover .bottom-nav-slot-icon.inactive {
-  color: #1e281b;
+  color: var(--theme-primary-dark);
+}
+
+/* Centered Navigation Icons */
+.bottom-nav-slot-icon {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 250ms ease, transform 300ms cubic-bezier(0.34, 1.38, 0.64, 1);
+}
+
+.bottom-nav-slot-icon.active {
+  color: #141c13;
+  transform: scale(1.08);
+}
+
+.bottom-nav-slot-icon.inactive {
+  color: #586655;
+  transform: scale(1);
+}
+
+.bottom-nav-slot-btn:hover .bottom-nav-slot-icon.inactive {
+  color: var(--theme-primary-dark);
 }
 
 /* ==========================================================================
@@ -1117,52 +1249,15 @@ button.paw-card:hover,
 }
 
 /* ==========================================================================
-   Central Focal Stage (Owner + Pet in the Center at 55–65% Height)
-   Completely borderless, naturally blended into the background
+   Playful 2D Pet-Face Background Illustration System
+   Happy Puppy Faces (Dog Theme) & Happy Kitten Faces (Cat Theme)
+   Pure vector SVGs, beautifully distributed in corners, edges & open spaces
    ========================================================================== */
-.paw-focal-center-stage {
+.paw-faces-stage {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   pointer-events: none;
   z-index: 1;
-}
-
-.paw-focal-art-frame {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: clamp(340px, 60vh, 580px); /* 55–65% of visible viewport height */
-  width: clamp(320px, 60vh, 580px);
-  max-width: 92vw;
-  pointer-events: none;
-  /* Radial feathering mask completely dissolves any image edge into natural space */
-  mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 50%, transparent 98%);
-  -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 50%, transparent 98%);
-}
-
-.paw-focal-illustration-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center center;
-  opacity: 0.44;
-  filter: saturate(1.08);
-  transform: translateZ(0);
-  pointer-events: none;
-}
-
-/* ==========================================================================
-   Surrounding Decorative Orbit
-   Balanced around the main illustration in corners & edges
-   ========================================================================== */
-.paw-decor-orbit {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
   overflow: hidden;
 }
 
@@ -1174,84 +1269,98 @@ button.paw-card:hover,
   color: #c28b12;
 }
 
-.paw-decor-item {
+/* Clay Floating Pet Icon Nodes (Randomly Positioned) */
+.paw-random-icon-node {
   position: absolute;
   pointer-events: none;
-  transition: transform 300ms ease, opacity 300ms ease;
+  z-index: 1;
+  will-change: transform;
+  animation-name: clayIconFloat;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
-/* Top Left Corner: Paws & Floating Heart */
-.decor-top-left-1 {
-  top: 6%;
-  left: 5%;
+.paw-random-icon-node svg {
+  display: block;
 }
 
-.decor-top-left-2 {
+@keyframes clayIconFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.paw-face-node {
+  position: absolute;
+  pointer-events: none;
+  transition: transform 350ms ease, opacity 350ms ease;
+  will-change: transform;
+  filter: drop-shadow(0 6px 16px var(--clay-shadow-outer));
+}
+
+/* Face Layout Positions */
+.face-pos-top-left {
+  top: 1.5%;
+  left: 1%;
+}
+
+.face-pos-top-right {
+  top: 2%;
+  right: 1.5%;
+}
+
+.face-pos-upper-center {
   top: 13%;
-  left: 9%;
+  right: 20%;
 }
 
-/* Top Right Corner: Fluffy Cloud & Sparkle */
-.decor-top-right-cloud {
-  top: 5%;
-  right: 6%;
+.face-pos-mid-left {
+  top: 42%;
+  left: 0.5%;
 }
 
-.decor-top-right-sparkle {
-  top: 14%;
-  right: 10%;
+.face-pos-mid-right {
+  top: 38%;
+  right: 0.8%;
 }
 
-/* Mid Flanks: Food Bowl, Bones & Toys */
-.decor-mid-left {
-  top: 48%;
-  left: 4%;
-  transform: translateY(-50%);
+.face-pos-lower-center {
+  bottom: 21%;
+  left: 16%;
 }
 
-.decor-mid-right {
-  top: 48%;
-  right: 4%;
-  transform: translateY(-50%);
-}
-
-/* Bottom Left Corner */
-.decor-bottom-left-bowl {
-  bottom: 12%;
-  left: 6%;
-}
-
-.decor-bottom-left-paw {
+.face-pos-bottom-left {
   bottom: 6%;
-  left: 11%;
+  left: 2%;
 }
 
-/* Bottom Right Corner */
-.decor-bottom-right-bone {
-  bottom: 12%;
-  right: 6%;
-}
-
-.decor-bottom-right-heart {
+.face-pos-bottom-right {
   bottom: 6%;
-  right: 11%;
+  right: 2%;
 }
 
-/* Soft Scrim Layer for 100% Crisp Content Readability */
-.paw-bg-scrim {
+/* Subtle Accent Nodes */
+.paw-decor-node {
   position: absolute;
-  inset: 0;
   pointer-events: none;
-  z-index: 3;
+  transition: transform 300ms ease;
 }
 
-.dog-scrim {
-  background: linear-gradient(180deg, rgba(248, 251, 246, 0.92) 0%, rgba(248, 251, 246, 0.65) 50%, rgba(248, 251, 246, 0.28) 100%);
-}
-
-.cat-scrim {
-  background: linear-gradient(180deg, rgba(254, 252, 246, 0.92) 0%, rgba(254, 252, 246, 0.65) 50%, rgba(254, 252, 246, 0.28) 100%);
-}
+.decor-dog-paw-1 { top: 12%; left: 14%; }
+.decor-dog-bone-1 { top: 8%; right: 15%; }
+.decor-dog-heart-1 { top: 27%; left: 8%; }
+.decor-dog-sparkle-1 { top: 25%; right: 10%; }
+.decor-dog-paw-2 { bottom: 28%; right: 11%; }
+.decor-dog-bone-2 { bottom: 17%; left: 13%; }
+.decor-dog-heart-2 { bottom: 13%; right: 16%; }
+.decor-dog-sparkle-2 { bottom: 19%; right: 26%; }
 
 /* Neutral Theme Subtle Paw Watermark */
 .neutral-paw-pattern {
@@ -1374,26 +1483,14 @@ button.paw-card:hover,
     padding: 0.65rem 0.5rem;
   }
 
-  /* Responsive Center Stage & Decorative Scaling */
-  .paw-focal-art-frame {
-    height: clamp(300px, 58vh, 460px);
-    width: clamp(280px, 58vh, 460px);
-  }
-
-  .paw-decor-item {
+  /* Responsive Pet Faces Scaling for Tablets */
+  .paw-face-node {
     transform: scale(0.85);
   }
 
-  .decor-top-left-1 { top: 4%; left: 3%; }
-  .decor-top-left-2 { top: 9%; left: 6%; }
-  .decor-top-right-cloud { top: 4%; right: 4%; }
-  .decor-top-right-sparkle { top: 10%; right: 7%; }
-  .decor-mid-left { left: 2%; }
-  .decor-mid-right { right: 2%; }
-  .decor-bottom-left-bowl { bottom: 9%; left: 4%; }
-  .decor-bottom-left-paw { bottom: 5%; left: 8%; }
-  .decor-bottom-right-bone { bottom: 9%; right: 4%; }
-  .decor-bottom-right-heart { bottom: 5%; right: 8%; }
+  .paw-decor-node {
+    transform: scale(0.85);
+  }
 }
 
 @media (max-width: 480px) {
@@ -1421,6 +1518,26 @@ button.paw-card:hover,
     padding: 1.25rem 1rem !important;
     max-width: calc(100vw - 1.5rem) !important;
     margin: 0 auto;
+  }
+
+  /* Responsive Pet Faces & Random Icons Scaling for Mobile */
+  .face-pos-upper-center,
+  .face-pos-lower-center,
+  .hide-on-mobile {
+    display: none !important; /* Hide interior faces on mobile so cards stay completely clean */
+  }
+
+  .paw-random-icon-node {
+    transform: scale(0.82);
+    transform-origin: center center;
+  }
+
+  .paw-face-node {
+    transform: scale(0.72);
+  }
+
+  .paw-decor-node {
+    transform: scale(0.75);
   }
 }
 
@@ -1468,13 +1585,12 @@ button.paw-card:hover,
     font-size: 1.5rem !important;
   }
 
-  .paw-focal-art-frame {
-    height: clamp(260px, 55vh, 360px);
-    width: clamp(240px, 55vh, 360px);
+  .paw-face-node {
+    transform: scale(0.6);
   }
 
-  .paw-decor-item {
-    transform: scale(0.72);
+  .paw-decor-node {
+    transform: scale(0.65);
   }
 }
 

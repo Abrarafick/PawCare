@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useMemo, useEffect } from 'react';
 import { usePet } from './PetContext';
 import type { Pet, Species } from '../types';
 
@@ -57,6 +57,11 @@ export const PetThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
   }, [selectedPet]);
 
+  useEffect(() => {
+    document.body.classList.remove('theme-dog', 'theme-cat', 'theme-neutral');
+    document.body.classList.add(`theme-${themeValue.theme}`);
+  }, [themeValue.theme]);
+
   return (
     <PetThemeContext.Provider value={themeValue}>
       {children}
@@ -71,4 +76,3 @@ export const usePetTheme = (): PetThemeContextValue => {
   }
   return context;
 };
-
