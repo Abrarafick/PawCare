@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.pets.models import Pet
+from apps.common.storage import save_private_file, delete_private_file, get_private_file_response
 from .models import MedicalReport
 from .serializers import MedicalReportSerializer, MedicalReportUploadSerializer
 
@@ -161,8 +162,8 @@ class MedicalReportListCreateView(APIView):
         storage_key = f'reports/{pet.id}/{uuid.uuid4()}{ext}'
 
         try:
-            _save_private_file(storage_key, file_obj)
-        except OSError as e:
+            save_private_file(storage_key, file_obj)
+        except Exception as e:
             logger.error('Failed to save uploaded file: %s', e)
             return Response(
                 {'detail': 'Failed to save file. Please try again.'},
@@ -184,7 +185,7 @@ class MedicalReportListCreateView(APIView):
         except Exception as e:
             # Cleanup orphaned file
             logger.error('DB error after file upload, cleaning up %s: %s', storage_key, e)
-            _delete_private_file(storage_key)
+            delete_private_file(storage_key)
             return Response(
                 {'detail': 'Failed to save report record. Please try again.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -222,7 +223,7 @@ class MedicalReportDetailView(APIView):
         report.delete()
 
         # Then delete from storage (log failure, but don't reverse DB delete)
-        deleted = _delete_private_file(storage_key)
+        deleted = delete_private_file(storage_key)
         if not deleted:
             logger.error(
                 'DB record deleted but file deletion failed for storage_key: %s', storage_key
@@ -237,24 +238,11 @@ class MedicalReportFileView(APIView):
 
     def get(self, request, pet_id, report_id):
         report = _get_report_for_pet(request, pet_id, report_id)
-
-        file_path = Path(settings.PRIVATE_MEDIA_ROOT) / report.storage_key
-        if not file_path.exists():
-            logger.error('Report file not found on disk: %s', report.storage_key)
-            raise Http404
-
         as_download = request.query_params.get('download', '').lower() == 'true'
 
-        response = FileResponse(
-            open(file_path, 'rb'),
+        return get_private_file_response(
+            storage_key=report.storage_key,
             content_type=report.mime_type,
+            download_filename=report.original_filename,
+            as_download=as_download,
         )
-
-        if as_download:
-            # Suggest download filename based on original
-            safe_filename = report.original_filename
-            response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
-        else:
-            response['Content-Disposition'] = f'inline; filename="{report.original_filename}"'
-
-        return response

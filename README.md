@@ -1,220 +1,200 @@
-# PawCare
+# 🐾 PawCare
 
 > **"Your Pet's Health, All in One Place."**
 
-PawCare is a secure, full-stack web application that helps individual pet owners manage vaccination schedules, vaccination records, and private medical documents for all their pets.
+PawCare is a full-stack web and mobile-responsive pet health management platform built with **Django REST Framework** and **React 19**. It features a modern **Claymorphism** UI, dynamic species-based color themes (Dog & Cat), native touch-swipe sliding transitions, and private authenticated medical document storage.
 
 ---
 
-## Features
+## ✨ Features
 
-- 🐾 **Pet Profiles** — Create and manage profiles for multiple cats, dogs, or other pets.
-- 💉 **Vaccination Reminders** — Track upcoming and overdue vaccinations with clear status indicators.
-- 📋 **Vaccination History** — View a complete record of administered vaccines per pet.
-- 🔒 **Medical Document Vault** — Securely upload, view, download, and manage veterinary documents (images and PDFs). All documents are private and server-authorized.
+- 🐶🐱 **Species-Aware Claymorphism UI** — Soft, tactile 3D clay aesthetic with dynamic color themes:
+  - **Dog Theme:** Mint-green palette with cute puppy line-art floating background icons.
+  - **Cat Theme:** Pastel warm butter-yellow palette with cute kitten line-art floating background icons.
+  - **Neutral Theme:** Clean neutral clay palette for other pets.
+- 📱 **Mobile-App Sliding Experience** — Native touch and swipe gestures (swipe left/right to slide between tabs) with an animated floating bottom navigation bar and fixed parallax background.
+- 🐾 **Pet Profile Management** — Manage multiple pets with photo uploads, species, breed, birth date, weight, microchip ID, and medical notes.
+- 💉 **Vaccination Tracking** — Automatic status calculation (**Upcoming**, **Overdue**, and **Completed**) with completion logging and full history timelines.
+- 🔒 **Private Medical Document Vault** — Securely upload, view, and download veterinary records (JPEG, PNG, WebP, and PDF). All documents are private and protected by server-side authorization.
+- 📊 **Interactive Dashboard** — Quick summary cards for overdue vaccines, upcoming shots, and instant pet switching.
 
 ---
 
-## Technology Stack
+## 🛠️ Technology Stack
 
 | Layer | Technology |
-|-------|------------|
-| Backend | Python 3.11+, Django 5, Django REST Framework |
-| Auth | SimpleJWT (access + refresh tokens) |
-| Database | PostgreSQL 15+ |
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS |
-| File Storage | Private local filesystem (dev) / S3-compatible (prod) |
-| Testing | pytest-django, Vitest, React Testing Library, Playwright |
+|---|---|
+| **Backend** | Python 3.11+, Django 5.1, Django REST Framework |
+| **Authentication** | SimpleJWT (Access + Refresh tokens with auto-refresh) |
+| **Database** | SQLite (Zero-config local development) / PostgreSQL 15+ (Production) |
+| **File Storage** | Private local storage (`private_media/` in dev) / S3-compatible (Production) |
+| **Frontend** | React 19, TypeScript, Vite, React Router 7, TanStack Query 5, Axios, Lucide Icons |
+| **Styling** | Custom Claymorphism Design System (Pure CSS with custom variables) |
+| **Testing & Linting** | `pytest-django` (34 test cases), `oxlint`, TypeScript compiler |
 
 ---
 
-## Prerequisites
+## 🚀 Quick Start (Windows)
 
-- Python 3.11+
-- Node.js 18+
-- PostgreSQL 15+
-- pnpm (or npm/yarn)
-- (Optional) python-magic system dependency: `libmagic` — see setup notes below
+PawCare includes convenient one-click scripts for Windows:
+
+### One-Click Start
+Double-click **`run-pawcare.bat`** in the project root. This automatically:
+1. Starts the Django backend on `http://localhost:8000`
+2. Starts the Vite frontend on `http://localhost:5173`
+3. Opens PawCare in your default browser
+
+### Demo Account
+- **Email:** `demo@pawcare.com`
+- **Password:** `PawCare123!`
 
 ---
 
-## Quick Start
+## 💻 Manual Setup Guide
 
-### 1. Clone the repository
+### Prerequisites
+- **Python 3.11+**
+- **Node.js 18+** & **npm**
 
-```bash
-git clone https://github.com/yourusername/pawcare.git
-cd pawcare
-```
+---
 
-### 2. Backend setup
+### 1. Backend Setup
 
 ```bash
 cd pawcare-backend
 
-# Create and activate virtual environment
+# 1. Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate        # Linux/macOS
-# venv\Scripts\activate         # Windows
 
-# Install dependencies
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# Configure environment
-cp ../.env.example .env
-# Edit .env with your PostgreSQL credentials and Django secret key
-
-# Create the database
-createdb pawcare
-# (or use psql: CREATE DATABASE pawcare;)
-
-# Run migrations
+# 3. Run database migrations (uses SQLite by default - no DB setup needed!)
 python manage.py migrate
 
-# Create a superuser (optional, for Django admin)
+# 4. (Optional) Create demo data or superuser
 python manage.py createsuperuser
 
-# Start the development server
-python manage.py runserver
+# 5. Start the development server
+python manage.py runserver 0.0.0.0:8000
 ```
 
-The backend API will be available at `http://localhost:8000/api/`.
+The API is now live at: `http://localhost:8000/api/`
 
-### 3. Frontend setup
+---
+
+### 2. Frontend Setup
+
+In a new terminal window:
 
 ```bash
 cd pawcare-frontend
 
-# Install dependencies
-pnpm install
+# 1. Install dependencies
+npm install
 
-# Configure environment
-cp ../.env.example .env.local
-# Set VITE_API_BASE_URL=http://localhost:8000/api
-
-# Start the development server
-pnpm dev
+# 2. Start the Vite development server
+npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173`.
+The frontend application will open at: `http://localhost:5173`
+
+> 💡 **API Proxy Note:** Vite is pre-configured with a development proxy that forwards all `/api` requests to `http://localhost:8000`, so no manual environment variable configuration is required for local dev.
 
 ---
 
-## Running Tests
+## 🧪 Testing & Verification
 
-### Backend
+### Run Backend Tests (34 test cases)
 
 ```bash
 cd pawcare-backend
-source venv/bin/activate
+venv\Scripts\activate   # Windows (or source venv/bin/activate on Unix)
 pytest
 ```
 
-### Frontend
+Tests cover:
+- User registration, duplicate email rejection, login, and JWT token issuance.
+- Pet CRUD and strict cross-user data isolation.
+- Vaccination status computation (Upcoming, Due Today, Overdue, Completed).
+- Medical document uploads, MIME validation, and private permission checks.
+- Dashboard count aggregations.
+
+### Run Frontend Typecheck & Linter
 
 ```bash
 cd pawcare-frontend
-pnpm test
-```
 
-### End-to-End (Playwright)
+# Type checking & production build verification
+npm run build
 
-```bash
-cd pawcare-frontend
-pnpm exec playwright test
+# Fast code linting with Oxlint
+npm run lint
 ```
 
 ---
 
-## Private File Storage
-
-**Development:** Files are stored in `pawcare-backend/private_media/`. This directory is **never** served statically — all file access goes through authenticated Django views.
-
-**Production:** Configure an S3-compatible private bucket (e.g., Backblaze B2 or Cloudflare R2) by setting the appropriate environment variables in `.env`. See `ARCHITECTURE.md` for details.
-
-> ⚠️ **Never commit the `private_media/` directory or any real user documents to Git.**
-
----
-
-## Environment Variables
-
-Copy `.env.example` to `.env` (in `pawcare-backend/`) and fill in your values.
-
-Key variables:
-
-| Variable | Description |
-|----------|-------------|
-| `DJANGO_SECRET_KEY` | Django secret key (generate a new one) |
-| `DB_NAME`, `DB_USER`, `DB_PASSWORD` | PostgreSQL credentials |
-| `STORAGE_BACKEND` | `local` (dev) or `b2`/`s3` (production) |
-| `MAX_UPLOAD_SIZE` | Max file upload size in bytes (default: 10 MB) |
-| `CORS_ALLOWED_ORIGINS` | Frontend origin(s) allowed to call the API |
-| `VITE_API_BASE_URL` | Backend URL used by React (in `.env.local`) |
-
----
-
-## Project Structure
+## 📂 Project Structure
 
 ```
-pawcare/
-├── pawcare-backend/       # Django REST API
-│   ├── config/            # Settings, URLs, WSGI
+PawCare/
+├── pawcare-backend/            # Django REST Framework API
 │   ├── apps/
-│   │   ├── accounts/      # Authentication
-│   │   ├── pets/          # Pet profiles
-│   │   ├── vaccinations/  # Vaccination records
-│   │   └── reports/       # Medical documents
-│   ├── private_media/     # Private file storage (dev only, gitignored)
-│   └── requirements.txt
+│   │   ├── accounts/           # User authentication & JWT endpoints
+│   │   ├── dashboard/          # Summary statistics & counts
+│   │   ├── pets/               # Pet CRUD & photo handling
+│   │   ├── reports/            # Medical reports & private file storage
+│   │   └── vaccinations/       # Vaccination schedules & logs
+│   ├── config/
+│   │   └── settings/
+│   │       ├── base.py         # Shared configuration
+│   │       ├── development.py  # Dev settings (SQLite, CORS open)
+│   │       └── production.py   # Production settings (PostgreSQL, S3)
+│   ├── private_media/          # Private medical uploads (never served statically)
+│   ├── manage.py
+│   ├── pytest.ini
+│   ├── requirements.txt
+│   └── tests.py                # Comprehensive test suite (34 tests)
 │
-├── pawcare-frontend/      # React + TypeScript SPA
+├── pawcare-frontend/           # React 19 + TypeScript SPA
 │   ├── src/
-│   │   ├── api/
-│   │   ├── components/
-│   │   ├── features/
-│   │   ├── hooks/
-│   │   └── router/
-│   └── package.json
+│   │   ├── api/                # Axios API clients & interceptors
+│   │   ├── assets/             # Images & static assets
+│   │   ├── components/         # Claymorphism cards, bottom nav, modals
+│   │   ├── context/            # Auth, Pet, and Theme React contexts
+│   │   ├── pages/              # Dashboard, Pets, Vaccinations, Reports, Profile
+│   │   ├── types/              # TypeScript interfaces & types
+│   │   ├── App.tsx             # Root router with sliding page wrapper
+│   │   └── index.css           # Claymorphism design system & animations
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vite.config.ts          # Vite configuration with /api proxy
 │
-├── PRD.md                 # Product Requirements Document
-├── ARCHITECTURE.md        # System architecture
-├── DATABASE_SCHEMA.md     # Database schema
-├── TASKS.md               # Implementation task tracker
-├── .env.example           # Environment variable template
-└── .gitignore
+├── run-pawcare.bat             # 1-Click launcher (starts backend + frontend)
+├── start-backend.bat           # Starts backend server on port 8000
+├── start-frontend.bat          # Starts frontend server on port 5173
+├── README.md                   # Project documentation
+├── PRD.md                      # Product Requirements Document
+├── ARCHITECTURE.md             # System architecture & API specifications
+└── DATABASE_SCHEMA.md          # Database schema & entity relationships
 ```
 
 ---
 
-## Documentation
+## 🔐 Security Architecture
 
-- [`PRD.md`](PRD.md) — Full product requirements
-- [`ARCHITECTURE.md`](ARCHITECTURE.md) — System design and API structure
-- [`DATABASE_SCHEMA.md`](DATABASE_SCHEMA.md) — Database tables, indexes, and relationships
-- [`TASKS.md`](TASKS.md) — Implementation phases and task tracker
-
----
-
-## Security Notes
-
-- All medical documents are private and served only through authenticated API endpoints.
-- JWT access tokens expire in 15 minutes; refresh tokens are stored in HttpOnly cookies.
-- File uploads are validated server-side (MIME type, size, extension).
-- Ownership is enforced on every API endpoint — users can only access their own pets and records.
-- No production secrets are committed to Git.
+1. **Private File Storage:** Medical reports and pet photos are stored in `private_media/` and are **never** accessible via static URLs. All file requests pass through Django authenticated views that verify pet ownership.
+2. **Server-Side File Validation:** Uploaded documents are inspected using `python-magic` to check actual binary MIME types (allowing only JPEG, PNG, WebP, and PDF up to 10 MB).
+3. **Data Isolation:** Every database query strictly filters by the authenticated user (`request.user`), preventing IDOR (Insecure Direct Object Reference) vulnerabilities.
+4. **JWT Lifecycle:** Access tokens are short-lived. The client automatically refreshes tokens via response interceptors when receiving a `401 Unauthorized`.
 
 ---
 
-## License
+## 📄 License
 
-MIT License — see `LICENSE` for details.
-
----
-
-## Limitations (Current MVP)
-
-- Email reminders not yet implemented (requires email provider configuration).
-- Camera capture requires HTTPS in production (works on `localhost` in dev).
-- PDF preview in browser depends on browser's built-in PDF support.
-- Production deployment documentation pending.
-
+This project is licensed under the MIT License.

@@ -1,32 +1,40 @@
-# React + TypeScript + Vite
+# 🐾 PawCare Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The client-side single page application for PawCare, built with **React 19**, **TypeScript**, and **Vite**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🎨 UI & Features
 
-## React Compiler
+- **Claymorphism Design System:** Soft inflated 3D clay aesthetic with inner highlights and layered shadows defined in `src/index.css`.
+- **Dynamic Species Themes:**
+  - 🐶 **Dog Theme:** Soft mint-green palette with cute puppy face floating background icons.
+  - 🐱 **Cat Theme:** Soft pastel butter-yellow palette with cute kitten face floating background icons.
+  - 🐾 **Neutral Theme:** Clean neutral clay palette.
+- **Mobile-First Gestures:** Touch-swipe sliding screen navigation and animated floating bottom pill bar.
+- **State & Data Fetching:** TanStack React Query 5 with Axios interceptors for seamless JWT authentication and automatic token refresh.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 🛠️ Scripts
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+```bash
+# Start development server on http://localhost:5173
+npm run dev
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+# Type-check and build production bundle
+npm run build
+
+# Fast linting with Oxlint
+npm run lint
+
+# Preview production build locally
+npm run preview
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---
+
+## 🔌 API Proxy
+
+Vite is pre-configured with a local proxy in `vite.config.ts`:
+- Requests to `/api/*` are automatically forwarded to `http://localhost:8000/api/*`.

@@ -14,6 +14,7 @@ from rest_framework.response import Response
 
 from .models import Pet
 from .serializers import PetSerializer, PetPhotoUploadSerializer
+from apps.common.storage import save_private_file, delete_private_file, get_private_file_response
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +74,7 @@ class PetDetailView(APIView):
         pet = self._get_pet(request, pet_id)
         # Clean up pet photo if it exists
         if pet.photo_key:
-            _delete_private_file(pet.photo_key)
+            delete_private_file(pet.photo_key)
         pet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -99,12 +100,12 @@ class PetPhotoUploadView(APIView):
 
         # Delete old photo if it exists
         if pet.photo_key:
-            _delete_private_file(pet.photo_key)
+            delete_private_file(pet.photo_key)
 
         # Save new photo
         ext = _get_extension(photo_file.name)
         storage_key = f'pets/{pet.id}/{uuid.uuid4()}{ext}'
-        saved_key = _save_private_file(storage_key, photo_file)
+        saved_key = save_private_file(storage_key, photo_file)
 
         pet.photo_key = saved_key
         pet.save(update_fields=['photo_key', 'updated_at'])
@@ -115,7 +116,7 @@ class PetPhotoUploadView(APIView):
     def delete(self, request, pet_id):
         pet = self._get_pet(request, pet_id)
         if pet.photo_key:
-            _delete_private_file(pet.photo_key)
+            delete_private_file(pet.photo_key)
             pet.photo_key = ''
             pet.save(update_fields=['photo_key', 'updated_at'])
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -135,18 +136,17 @@ class PetPhotoServeView(APIView):
         if not pet.photo_key:
             raise Http404
 
-        file_path = Path(settings.PRIVATE_MEDIA_ROOT) / pet.photo_key
-        if not file_path.exists():
-            logger.error('Pet photo file not found: %s', file_path)
-            raise Http404
-
-        # Determine content type
-        ext = file_path.suffix.lower()
+        ext = os.path.splitext(pet.photo_key)[1].lower()
         content_types = {'.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
                          '.png': 'image/png', '.webp': 'image/webp'}
-        content_type = content_types.get(ext, 'application/octet-stream')
+        content_type = content_types.get(ext, 'image/jpeg')
 
-        return FileResponse(open(file_path, 'rb'), content_type=content_type)
+        return get_private_file_response(
+            storage_key=pet.photo_key,
+            content_type=content_type,
+            download_filename=f"{pet.name}_photo{ext}",
+            as_download=False,
+        )
 
 
 # ─── Private storage helpers ────────────────────────────────────────────────
