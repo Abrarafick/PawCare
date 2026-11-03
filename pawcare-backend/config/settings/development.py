@@ -8,14 +8,20 @@ import os
 
 DEBUG = True
 
-# Development database — SQLite (no server needed)
-# To use PostgreSQL instead, set STORAGE_BACKEND=postgres and configure DB_* vars
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # noqa: F405
+# Database: Connect to Neon PostgreSQL if DATABASE_URL is present, otherwise fallback to SQLite
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    from config.settings.production import _parse_db_url
+    DATABASES = {
+        'default': _parse_db_url(database_url)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',  # noqa: F405
+        }
+    }
 
 # In development, allow all origins for convenience
 CORS_ALLOW_ALL_ORIGINS = True

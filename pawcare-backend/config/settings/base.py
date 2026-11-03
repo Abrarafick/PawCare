@@ -7,15 +7,21 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 
-# Load .env file
+# Load environment variables (.env and .env.local from project root and backend)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+load_dotenv(BASE_DIR.parent / '.env.local')
+load_dotenv(BASE_DIR.parent / '.env')
 load_dotenv(BASE_DIR / '.env')
+load_dotenv(BASE_DIR / '.env.local')
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'insecure-dev-key-change-in-production')
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = list(set(
+    ['localhost', '127.0.0.1', 'testserver'] +
+    [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '').split(',') if h.strip()]
+))
 
 # Application definition
 INSTALLED_APPS = [
