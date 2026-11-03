@@ -122,3 +122,4 @@ def delete_private_file(storage_key: str) -> bool:
     except OSError as e:
         logger.error('Failed to delete local file %s: %s', storage_key, e)
         return False
+

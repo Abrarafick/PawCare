@@ -13,3 +13,4 @@ echo "==> Running database migrations..."
 python manage.py migrate
 
 echo "==> Build complete!"
+
