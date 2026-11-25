@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { petsApi } from '../api/pets';
+import { invalidatePetPhotoCache } from './AuthenticatedPetPhoto';
+import { prepareCameraImage } from '../utils/imageCompress';
 import { X, Upload, Trash2, Camera } from 'lucide-react';
 
 interface PhotoModalProps {
   isOpen: boolean;
   petId: string;
+  petName?: string;
   hasExistingPhoto: boolean;
   onClose: () => void;
   onSuccess: () => void;
@@ -13,6 +16,7 @@ interface PhotoModalProps {
 export const PhotoModal: React.FC<PhotoModalProps> = ({
   isOpen,
   petId,
+  petName = 'your pet',
   hasExistingPhoto,
   onClose,
   onSuccess,
@@ -20,24 +24,35 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [preparing, setPreparing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const selected = e.target.files[0];
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(selected.type)) {
-        setError('Only JPEG, PNG, or WEBP images are supported.');
-        return;
-      }
-      if (selected.size > 10 * 1024 * 1024) {
-        setError('Image must not exceed 10 MB.');
-        return;
-      }
+      const raw = e.target.files[0];
       setError(null);
-      setFile(selected);
-      setPreview(URL.createObjectURL(selected));
+      setPreparing(true);
+      try {
+        const prepared = await prepareCameraImage(raw);
+        if (!['image/jpeg', 'image/png', 'image/webp'].includes(prepared.type)) {
+          setError('Please pick a JPEG, PNG, or WEBP photo.');
+          return;
+        }
+        if (prepared.size > 10 * 1024 * 1024) {
+          setError('Photo is too large (over 10 MB).');
+          return;
+        }
+        setFile(prepared);
+        if (preview) URL.revokeObjectURL(preview);
+        setPreview(URL.createObjectURL(prepared));
+      } finally {
+        setPreparing(false);
+      }
     }
   };
 
@@ -47,6 +62,9 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
     setError(null);
     try {
       await petsApi.uploadPhoto(petId, file);
+      invalidatePetPhotoCache(petId);
+      setFile(null);
+      setPreview(null);
       onSuccess();
       onClose();
     } catch {
@@ -61,6 +79,9 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
     setError(null);
     try {
       await petsApi.deletePhoto(petId);
+      invalidatePetPhotoCache(petId);
+      setFile(null);
+      setPreview(null);
       onSuccess();
       onClose();
     } catch {
@@ -71,29 +92,34 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
   };
 
   return (
-    <div className="paw-modal-backdrop">
-      <div className="paw-modal-card" style={{ maxWidth: '440px' }}>
+    <div
+      className="paw-modal-backdrop"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !loading) onClose();
+      }}
+    >
+      <div className="paw-modal-card" style={{ maxWidth: '460px' }}>
         <div className="paw-modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <div
               style={{
-                width: '36px',
-                height: '36px',
+                width: '40px',
+                height: '40px',
                 borderRadius: '50%',
-                background: 'var(--mint-light)',
+                background: 'var(--theme-primary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--mint-dark)',
+                color: 'var(--theme-primary-dark)',
               }}
             >
-              <Camera size={18} />
+              <Camera size={20} />
             </div>
-            <h3 className="paw-modal-title">Pet Photo</h3>
+            <h3 className="paw-modal-title">Photo of {petName}</h3>
           </div>
 
-          <button onClick={onClose} className="btn-circle" style={{ width: '36px', height: '36px' }}>
-            <X size={16} />
+          <button onClick={onClose} className="btn-circle" style={{ width: '38px', height: '38px' }} aria-label="Close">
+            <X size={18} />
           </button>
         </div>
 
@@ -103,17 +129,17 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
           </div>
         )}
 
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           {preview ? (
             <div
               style={{
-                width: '130px',
-                height: '130px',
-                margin: '0 auto 1rem',
+                width: '150px',
+                height: '150px',
+                margin: '0 auto 1.1rem',
                 borderRadius: '50%',
                 overflow: 'hidden',
-                border: '4px solid var(--mint)',
-                boxShadow: '0 8px 24px rgba(154, 217, 113, 0.3)',
+                border: '4px solid var(--theme-primary)',
+                boxShadow: '0 8px 24px var(--theme-glow)',
               }}
             >
               <img src={preview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -121,36 +147,66 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
           ) : (
             <div
               style={{
-                padding: '2rem 1rem',
-                border: '2px dashed var(--border-light)',
+                padding: '1.65rem 1rem',
+                border: '2px dashed var(--theme-hover-border)',
                 borderRadius: 'var(--radius-lg)',
-                background: 'var(--bg-chip)',
-                marginBottom: '1rem',
+                background: 'var(--theme-primary-subtle)',
+                marginBottom: '1.1rem',
               }}
             >
-              <Upload size={32} style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }} />
-              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-                Select a cute photo of your pet
+              <Camera size={40} style={{ color: 'var(--theme-primary-dark)', marginBottom: '0.5rem' }} />
+              <p style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                {preparing ? 'Preparing photo...' : `Snap or choose a photo of ${petName}`}
               </p>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '0.2rem' }}>
-                JPEG, PNG, WEBP up to 10 MB
+              <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                Works directly with your phone camera!
               </p>
             </div>
           )}
 
+          {/* Camera capture & device gallery inputs */}
           <input
+            ref={cameraInputRef}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/*"
+            capture="environment"
             onChange={handleFileChange}
-            id="photo-input"
             style={{ display: 'none' }}
           />
-          <label htmlFor="photo-input" className="btn-pill btn-pill-secondary btn-pill-sm" style={{ cursor: 'pointer' }}>
-            Choose from Device
-          </label>
+          <input
+            ref={galleryInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+          />
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            <button
+              type="button"
+              onClick={() => cameraInputRef.current?.click()}
+              className="btn-pill btn-pill-primary"
+              style={{ width: '100%' }}
+              disabled={preparing || loading}
+            >
+              <Camera size={19} />
+              <span>Take Photo with Camera</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => galleryInputRef.current?.click()}
+              className="btn-pill btn-pill-secondary btn-pill-sm"
+              style={{ width: '100%' }}
+              disabled={preparing || loading}
+            >
+              <Upload size={17} />
+              <span>Choose Photo from Phone</span>
+            </button>
+          </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           {hasExistingPhoto ? (
             <button
               type="button"
@@ -161,7 +217,9 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
               <Trash2 size={14} />
               <span>Remove</span>
             </button>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
 
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <button type="button" onClick={onClose} className="btn-pill btn-pill-secondary btn-pill-sm" disabled={loading}>
@@ -171,7 +229,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
               type="button"
               onClick={handleUpload}
               className="btn-pill btn-pill-primary btn-pill-sm"
-              disabled={!file || loading}
+              disabled={!file || loading || preparing}
             >
               {loading ? 'Saving...' : 'Save Photo'}
             </button>

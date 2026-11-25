@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { petsApi } from '../api/pets';
+import { invalidatePetPhotoCache } from '../components/AuthenticatedPetPhoto';
+import { prepareCameraImage } from '../utils/imageCompress';
 import type { Species } from '../types';
-import { ArrowLeft, Save, Sparkles } from 'lucide-react';
+import { ArrowLeft, Save, Sparkles, Camera, Upload } from 'lucide-react';
 
 export const PetFormPage: React.FC = () => {
   const { petId } = useParams<{ petId: string }>();
@@ -18,6 +20,10 @@ export const PetFormPage: React.FC = () => {
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [estimatedAge, setEstimatedAge] = useState('');
   const [notes, setNotes] = useState('');
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const cameraPhotoRef = useRef<HTMLInputElement>(null);
+  const devicePhotoRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(isEditing);
@@ -79,13 +85,21 @@ export const PetFormPage: React.FC = () => {
     };
 
     try {
+      let targetPetId = petId;
       if (isEditing && petId) {
         const updated = await petsApi.update(petId, payload);
-        navigate(`/pets/${updated.id}`);
+        targetPetId = updated.id;
       } else {
         const created = await petsApi.create(payload);
-        navigate(`/pets/${created.id}`);
+        targetPetId = created.id;
       }
+
+      if (photoFile && targetPetId) {
+        await petsApi.uploadPhoto(targetPetId, photoFile);
+        invalidatePetPhotoCache(targetPetId);
+      }
+
+      navigate(`/pets/${targetPetId}`);
     } catch (err: any) {
       const data = err.response?.data;
       if (typeof data === 'string') {
@@ -145,6 +159,76 @@ export const PetFormPage: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit}>
+          {/* Phone Camera Pet Photo Picker */}
+          <div
+            className="paw-input-group"
+            style={{
+              padding: '1rem',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--theme-primary-subtle)',
+              border: '1.5px dashed var(--theme-hover-border)',
+              marginBottom: '1.25rem',
+            }}
+          >
+            <label className="paw-label" style={{ marginBottom: '0.5rem' }}>
+              Pet Photo (Snap with Phone Camera or Pick Image)
+            </label>
+            <input
+              ref={cameraPhotoRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              style={{ display: 'none' }}
+              onChange={async (e) => {
+                const raw = e.target.files?.[0];
+                if (!raw) return;
+                const prepared = await prepareCameraImage(raw);
+                setPhotoFile(prepared);
+                if (photoPreview) URL.revokeObjectURL(photoPreview);
+                setPhotoPreview(URL.createObjectURL(prepared));
+              }}
+            />
+            <input
+              ref={devicePhotoRef}
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={async (e) => {
+                const raw = e.target.files?.[0];
+                if (!raw) return;
+                const prepared = await prepareCameraImage(raw);
+                setPhotoFile(prepared);
+                if (photoPreview) URL.revokeObjectURL(photoPreview);
+                setPhotoPreview(URL.createObjectURL(prepared));
+              }}
+            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
+              {photoPreview && (
+                <img
+                  src={photoPreview}
+                  alt="Pet preview"
+                  style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #fff' }}
+                />
+              )}
+              <button
+                type="button"
+                onClick={() => cameraPhotoRef.current?.click()}
+                className="btn-pill btn-pill-primary btn-pill-sm"
+              >
+                <Camera size={16} />
+                <span>Take Photo with Camera</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => devicePhotoRef.current?.click()}
+                className="btn-pill btn-pill-secondary btn-pill-sm"
+              >
+                <Upload size={16} />
+                <span>Choose Photo</span>
+              </button>
+            </div>
+          </div>
+
           {/* Pet Name */}
           <div className="paw-input-group">
             <label className="paw-label" htmlFor="pet-name">Pet Name *</label>

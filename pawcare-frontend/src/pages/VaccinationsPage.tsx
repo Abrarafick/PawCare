@@ -7,9 +7,10 @@ import type { Pet, VaccinationRecord } from '../types';
 import { PetHeader } from '../components/PetHeader';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { ReadAloudButton } from '../components/ReadAloudButton';
+import { VaccineCardScannerModal } from '../components/VaccineCardScannerModal';
 import {
   Plus, CheckCircle, AlertTriangle, Calendar,
-  Edit2, Trash2, X, Hospital, Clock, CheckCircle2, ShieldAlert
+  Edit2, Trash2, X, Hospital, Clock, CheckCircle2, ShieldAlert, Camera
 } from 'lucide-react';
 
 export const VaccinationsPage: React.FC = () => {
@@ -19,6 +20,7 @@ export const VaccinationsPage: React.FC = () => {
   const [pet, setPet] = useState<Pet | null>(null);
   const [reminders, setReminders] = useState<VaccinationRecord[]>([]);
   const [activeFilter, setActiveFilter] = useState<'ALL' | 'OVERDUE' | 'DUE_SOON' | 'UPCOMING' | 'COMPLETED'>('ALL');
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -271,6 +273,10 @@ export const VaccinationsPage: React.FC = () => {
                 : `${pet.name} has no pending vaccinations. Everything is up to date.`
             }
           />
+          <button onClick={() => setIsScannerOpen(true)} className="btn-pill btn-pill-secondary">
+            <Camera size={18} />
+            <span>Snap Vaccine Paper</span>
+          </button>
           <button onClick={openAddModal} className="btn-pill btn-pill-primary">
             <Plus size={18} />
             <span>Add Reminder</span>
@@ -649,6 +655,17 @@ export const VaccinationsPage: React.FC = () => {
         onConfirm={handleDelete}
         onCancel={() => setDeletingId(null)}
       />
+
+      {petId && (
+        <VaccineCardScannerModal
+          isOpen={isScannerOpen}
+          petId={petId}
+          petName={pet.name}
+          petSpecies={pet.species}
+          onClose={() => setIsScannerOpen(false)}
+          onSuccess={loadData}
+        />
+      )}
     </div>
   );
 };

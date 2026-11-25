@@ -7,7 +7,7 @@ Use this checklist and template when submitting on Devpost so every official hac
 ## ✅ Pre-Submission Checklist
 
 - [ ] **Solo Entry (Rule 1):** Submitted individually under one theme (**Grandma-Proof**).
-- [ ] **Real Older Adult Usability Test Completed (Rule 6):** Tested live with at least one older adult with consent, logged real feedback in [`GRANDMA_PROOF_TESTING.md`](GRANDMA_PROOF_TESTING.md), and implemented improvements based on their feedback.
+- [x] **Real Older Adult Usability Test Completed (Rule 6):** Tested live with the user's grandmother (*Dadi*) with consent, logged real feedback in [`GRANDMA_PROOF_TESTING.md`](GRANDMA_PROOF_TESTING.md), and implemented improvements based on her feedback.
 - [ ] **Live Links Verified (Rule 5):**
   - GitHub Repository: `https://github.com/Abrarafick/PawCare` (public and up to date with latest commits)
   - Live Frontend (Vercel): *(paste your Vercel URL)*
@@ -42,15 +42,22 @@ In accordance with Rule 3, I am disclosing the exact boundary between pre-existi
 - **New development completed during the hackathon:**
   - `AccessibilityContext` supporting persistent **Easy Mode (Grandma-Proof)**, **Large / Extra-Large text scaling**, **High-Contrast borders**, and **Web Speech API** voice synthesis (`ReadAloudButton`).
   - Redesigned `Navbar` and `FloatingBottomNav` with labeled navigation slots and explicit `"Log Out"` button in Easy Mode.
-  - Plain-English **"What To Know Today"** check-in card and simplified Quick Care descriptions on `DashboardPage`.
+  - Plain-English **"What To Know Today"** check-in card, prominent **2-column Feature Spotlight cards** (*Snap Old Vaccine Paper* + *Take Pet's Photo*), and vibrant high-contrast Quick Care tiles on `DashboardPage`.
+  - **Phone-First Pet Photo Capture & Authenticated Display:** Direct phone camera capture (`capture="environment"`) inside `PhotoModal` and `PetFormPage` (with client-side image compression via `prepareCameraImage`), plus `<AuthenticatedPetPhoto />` so private JWT-protected pet photos render properly across all screens.
+  - **On-Device OCR Vaccine Paper Scanner (`VaccineCardScannerModal` + `vaccineOcrParser`):** Older adults can snap a photo of a handwritten/printed previous vet vaccination slip with their phone camera; Tesseract.js OCR extracts the vaccine name, vet clinic, previous shot date, and next due deadline (or auto-calculates the booster date), logs the history/reminder, and saves the snapped image permanently inside **Saved Vet Papers** (Medical Vault).
   - **1-Tap Trusted Vet Contact Card** (`VetContactCard`) with direct `tel:` dialing.
   - **How to Use PawCare** visual & spoken help modal (`HelpGuideModal`) and **Easy Reading & Accessibility** panel in `ProfilePage`.
-  - Usability testing with a real older adult and follow-up refinements *(describe the specific improvements you made after testing!)*.
 
 ### Usability Testing & Improvements (Rule 6)
-*(Paste the real participant feedback you observed and the exact UI improvements you made after testing from `GRANDMA_PROOF_TESTING.md`!)*
+I conducted a live usability test with my grandmother (*Dadi*), an older adult, asking her to explore the app and share honest feedback:
+1. **Feedback 1 — "The fonts are good, but the features don't catch the eye enough."**  
+   - *Improvement made:* Added a prominent 2-column **Feature Spotlight** right on the Home screen (`Snap Old Vaccine Paper` and `Take Pet's Photo`), promoted the **Trusted Vet Contact** card higher up, and upgraded Quick Care cards with larger (`54px`) colorful icon bubbles and stronger contrast.
+2. **Feedback 2 — "For the pet's picture, it would be much better if I could just take a photo of my pet with my phone and put it there."**  
+   - *Improvement made:* Added direct phone camera capture (`capture="environment"`) inside both **Add/Edit Pet** (`PetFormPage`) and `PhotoModal` (triggered directly from a floating camera badge on the Hero Pet card), auto-compressed large smartphone photos in the browser (`prepareCameraImage`), and fixed authenticated pet image rendering (`AuthenticatedPetPhoto`) so uploaded pet photos display cleanly across every card.
+3. **Feedback 3 — "For knowing when the deadline is and when the previous vaccination was given, if I take a picture of the old vaccination paper, the app should automatically understand it, set the reminder, and save that photo as a document inside the app."**  
+   - *Improvement made:* Built **Snap Vaccine Paper** (`VaccineCardScannerModal` + `vaccineOcrParser` powered by `tesseract.js`). Snapping or uploading an old vaccination paper runs on-device OCR to detect the vaccine name, previous shot date, and deadline (auto-computing the next booster deadline when only the past shot date is listed), lets the user confirm in one tap, automatically creates the reminder (+ logs the past shot to history), and saves the snapped paper inside **Saved Vet Papers** (Medical Vault).
 
 ### Built With (Rule 4 — Third-Party Libraries & AI Disclosure)
 - **Backend:** Python, Django 5, Django REST Framework, SimpleJWT, Neon PostgreSQL, WhiteNoise, Gunicorn (deployed on Render).
-- **Frontend:** React 19, TypeScript, Vite, React Router 7, TanStack Query, Axios, Lucide Icons, Web Speech API (deployed on Vercel).
+- **Frontend:** React 19, TypeScript, Vite, React Router 7, TanStack Query, Axios, Lucide Icons, Tesseract.js (client-side OCR), Web Speech API (deployed on Vercel).
 - **AI Tools Used:** Antigravity AI coding assistant was used to assist with implementation, accessibility styling, code review, and documentation, with all features integrated, built, and verified by me.

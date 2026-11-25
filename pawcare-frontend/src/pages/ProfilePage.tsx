@@ -5,6 +5,7 @@ import { usePet } from '../context/PetContext';
 import { useAccessibility, type TextScale } from '../context/AccessibilityContext';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { ReadAloudButton } from '../components/ReadAloudButton';
+import { AuthenticatedPetPhoto } from '../components/AuthenticatedPetPhoto';
 import {
   User, Shield, Mail, Calendar, PawPrint, LogOut,
   Sparkles, CheckCircle2, ChevronRight, Glasses, Type, Eye
@@ -110,9 +111,13 @@ export const ProfilePage: React.FC = () => {
                 fontSize: '1.4rem',
               }}
             >
-              {selectedPet.photo_url ? (
-                <img src={selectedPet.photo_url} alt={selectedPet.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-              ) : selectedPet.species?.toLowerCase() === 'cat' ? '🐱' : '🐶'}
+              <AuthenticatedPetPhoto
+                petId={selectedPet.id}
+                hasPhoto={Boolean(selectedPet.photo_url || selectedPet.photo_key)}
+                petName={selectedPet.name}
+                species={selectedPet.species}
+                emojiFontSize="1.4rem"
+              />
             </div>
             <div>
               <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>

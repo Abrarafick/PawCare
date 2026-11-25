@@ -5,18 +5,23 @@ import { usePet } from '../context/PetContext';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { ReadAloudButton } from '../components/ReadAloudButton';
 import { VetContactCard } from '../components/VetContactCard';
+import { AuthenticatedPetPhoto } from '../components/AuthenticatedPetPhoto';
+import { PhotoModal } from '../components/PhotoModal';
+import { VaccineCardScannerModal } from '../components/VaccineCardScannerModal';
 import type { DashboardData, DashboardPetSummary } from '../types';
 import {
   Plus, AlertTriangle, Calendar, FileText, ArrowRight,
-  CheckCircle2, Bell, ShieldAlert, ChevronRight
+  CheckCircle2, Bell, ShieldAlert, ChevronRight, Camera, Sparkles
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
-  const { selectedPetId, setSelectedPetId } = usePet();
+  const { selectedPetId, setSelectedPetId, refreshPets } = usePet();
   const { grandmaMode } = useAccessibility();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchDashboard = async () => {
@@ -166,11 +171,13 @@ export const DashboardPage: React.FC = () => {
                 className={`pet-category-pill ${catHoverClass} ${activeClass}`}
               >
                 <div className="pet-category-pill-avatar">
-                  {pet.photo_url ? (
-                    <img src={pet.photo_url} alt={pet.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-                  ) : (
-                    <span>{getSpeciesEmoji(pet.species)}</span>
-                  )}
+                  <AuthenticatedPetPhoto
+                    petId={pet.id}
+                    hasPhoto={Boolean(pet.photo_url)}
+                    petName={pet.name}
+                    species={pet.species}
+                    emojiFontSize="1.15rem"
+                  />
                 </div>
                 <span>{pet.name}</span>
                 {pet.overdue_count > 0 && (
@@ -259,31 +266,55 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.85rem' }}>
-                <div
+                <button
+                  type="button"
+                  onClick={() => setIsPhotoModalOpen(true)}
+                  title={`Take or change ${activePet.name}'s photo`}
                   style={{
-                    width: '64px',
-                    height: '64px',
+                    width: '74px',
+                    height: '74px',
                     borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.6)',
+                    background: 'rgba(255, 255, 255, 0.72)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 4px 14px rgba(0,0,0,0.06)',
-                    overflow: 'hidden',
+                    boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
                     border: '3px solid #ffffff',
                     flexShrink: 0,
+                    position: 'relative',
+                    cursor: 'pointer',
+                    padding: 0,
                   }}
                 >
-                  {activePet.photo_url ? (
-                    <img
-                      src={activePet.photo_url}
-                      alt={activePet.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <AuthenticatedPetPhoto
+                      petId={activePet.id}
+                      hasPhoto={Boolean(activePet.photo_url)}
+                      petName={activePet.name}
+                      species={activePet.species}
+                      emojiFontSize="2.2rem"
                     />
-                  ) : (
-                    <span style={{ fontSize: '2rem' }}>{getSpeciesEmoji(activePet.species)}</span>
-                  )}
-                </div>
+                  </div>
+                  <span
+                    style={{
+                      position: 'absolute',
+                      bottom: '-2px',
+                      right: '-2px',
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: '50%',
+                      background: '#ffffff',
+                      color: heroTextColor,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.16)',
+                      border: `2px solid ${heroTextColor}`,
+                    }}
+                  >
+                    <Camera size={14} />
+                  </span>
+                </button>
 
                 <div>
                   <h2 className="hero-pet-title" style={{ fontSize: '1.85rem', marginBottom: '0.1rem' }}>{activePet.name}</h2>
@@ -310,12 +341,20 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* View Profile Button */}
-              <div style={{ display: 'flex', gap: '0.6rem' }}>
+              {/* View Profile + Direct Camera Pet Photo Buttons */}
+              <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                <button
+                  onClick={() => setIsPhotoModalOpen(true)}
+                  className="btn-pill btn-pill-secondary btn-pill-sm"
+                  style={{ background: '#ffffff', color: heroTextColor, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.09)', fontWeight: 800 }}
+                >
+                  <Camera size={15} />
+                  <span>{activePet.has_photo ? 'Change Photo' : 'Take Pet Photo'}</span>
+                </button>
                 <button
                   onClick={() => navigate(`/pets/${activePet.id}`)}
                   className="btn-pill btn-pill-secondary btn-pill-sm"
-                  style={{ background: '#ffffff', color: 'var(--text-main)', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
+                  style={{ background: 'rgba(255,255,255,0.88)', color: 'var(--text-main)', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
                 >
                   <span>View Pet Profile</span>
                   <ArrowRight size={14} />
@@ -442,135 +481,213 @@ export const DashboardPage: React.FC = () => {
         </div>
       )}
 
-      {/* Quick Care Section - Arranged for Mobile App UX */}
+      {/* Eye-Catching Camera & Auto-Reminder Feature Spotlight */}
+      {activePet && (
+        <div className="feature-spotlight-grid">
+          <button
+            type="button"
+            onClick={() => setIsScannerOpen(true)}
+            className="feature-spotlight-card spotlight-primary"
+          >
+            <div className="spotlight-icon-bubble">
+              <Sparkles size={26} />
+            </div>
+            <div style={{ textAlign: 'left', flex: 1 }}>
+              <div className="spotlight-eyebrow">Auto-Read & Save</div>
+              <h3 className="spotlight-title">Snap Old Vaccine Paper</h3>
+              <p className="spotlight-desc">
+                Take a photo of a past shot card — automatically sets the next deadline & saves the paper!
+              </p>
+            </div>
+            <span className="btn-pill btn-pill-primary btn-pill-sm" style={{ flexShrink: 0 }}>
+              <Camera size={16} />
+              <span>Scan Card</span>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsPhotoModalOpen(true)}
+            className="feature-spotlight-card spotlight-secondary"
+          >
+            <div className="spotlight-icon-bubble spotlight-icon-alt">
+              <Camera size={26} />
+            </div>
+            <div style={{ textAlign: 'left', flex: 1 }}>
+              <div className="spotlight-eyebrow">Phone Camera</div>
+              <h3 className="spotlight-title">Take {activePet.name}'s Photo</h3>
+              <p className="spotlight-desc">
+                Snap a real picture of {activePet.name} right with your phone camera so it shows on their card.
+              </p>
+            </div>
+            <span className="btn-pill btn-pill-secondary btn-pill-sm" style={{ flexShrink: 0 }}>
+              <Camera size={16} />
+              <span>{activePet.has_photo ? 'Update' : 'Add Photo'}</span>
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* 1-Tap Trusted Vet Call Card */}
+      {activePet && <VetContactCard petId={activePet.id} petName={activePet.name} />}
+
+      {/* Quick Care Section - Eye-Catching High-Contrast Clay Modules */}
       {activePet && (
         <div style={{ marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
               Quick Care
             </h2>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>
-              Healthcare Modules
+            <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--theme-primary-dark)' }}>
+              Tap Any Box to Open
             </span>
           </div>
 
           <div className="quick-care-mobile-grid">
             {/* Reminders Card */}
             <div
-              className="quick-care-card"
+              className="quick-care-card quick-care-vibrant quick-care-reminders"
               onClick={() => navigate(`/pets/${activePet.id}/vaccinations`)}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.95rem' }}>
                 <div
                   style={{
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: '50%',
-                    background: 'var(--status-upcoming-bg)',
-                    color: 'var(--mint-dark)',
+                    width: '54px',
+                    height: '54px',
+                    borderRadius: '18px',
+                    background: 'var(--theme-primary)',
+                    color: 'var(--theme-primary-dark)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexShrink: 0,
+                    boxShadow: '0 6px 14px var(--theme-glow)',
                   }}
                 >
-                  <Bell size={22} />
+                  <Bell size={26} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>Vaccination Reminders</h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.825rem', marginTop: '0.15rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)' }}>Vaccination Reminders</h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.18rem', fontWeight: 600 }}>
                     {grandmaMode ? 'See upcoming shot dates & add reminders' : 'Deadlines, status & booster alerts'}
                   </p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span className="status-pill status-upcoming" style={{ fontSize: '0.75rem' }}>
+                <span className="status-pill status-upcoming" style={{ fontSize: '0.78rem', fontWeight: 800 }}>
                   {activePet.upcoming_count} Scheduled
                 </span>
-                <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+                <ChevronRight size={20} style={{ color: 'var(--theme-primary-dark)' }} />
               </div>
             </div>
 
             {/* Medical Vault Card */}
             <div
-              className="quick-care-card"
+              className="quick-care-card quick-care-vibrant quick-care-vault"
               onClick={() => navigate(`/pets/${activePet.id}/reports`)}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.95rem' }}>
                 <div
                   style={{
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: '50%',
-                    background: 'var(--bg-chip)',
-                    color: 'var(--text-main)',
+                    width: '54px',
+                    height: '54px',
+                    borderRadius: '18px',
+                    background: '#dbeafe',
+                    color: '#1d4ed8',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexShrink: 0,
+                    boxShadow: '0 6px 14px rgba(59, 130, 246, 0.2)',
                   }}
                 >
-                  <FileText size={22} />
+                  <FileText size={26} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>{grandmaMode ? 'Saved Vet Papers' : 'Medical Vault'}</h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.825rem', marginTop: '0.15rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)' }}>{grandmaMode ? 'Saved Vet Papers' : 'Medical Vault'}</h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.18rem', fontWeight: 600 }}>
                     {grandmaMode ? 'View vet receipts, notes & paper photos' : 'Prescriptions, lab PDFs & camera scans'}
                   </p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span className="status-pill" style={{ background: 'var(--bg-chip)', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                  Private Vault
+                <span className="status-pill" style={{ background: '#eff6ff', color: '#1d4ed8', fontSize: '0.78rem', fontWeight: 800 }}>
+                  {grandmaMode ? 'View Papers' : 'Private Vault'}
                 </span>
-                <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+                <ChevronRight size={20} style={{ color: '#1d4ed8' }} />
               </div>
             </div>
 
             {/* History Card */}
             <div
-              className="quick-care-card"
+              className="quick-care-card quick-care-vibrant quick-care-history"
               onClick={() => navigate(`/pets/${activePet.id}/history`)}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.95rem' }}>
                 <div
                   style={{
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: '50%',
+                    width: '54px',
+                    height: '54px',
+                    borderRadius: '18px',
                     background: 'var(--status-completed-bg)',
                     color: 'var(--status-completed-text)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexShrink: 0,
+                    boxShadow: '0 6px 14px rgba(21, 128, 61, 0.18)',
                   }}
                 >
-                  <CheckCircle2 size={22} />
+                  <CheckCircle2 size={26} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>Vaccination History</h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.825rem', marginTop: '0.15rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)' }}>Vaccination History</h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.18rem', fontWeight: 600 }}>
                     {grandmaMode ? 'Past shots your pet already got' : 'Archived past records & administration dates'}
                   </p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span className="status-pill status-completed" style={{ fontSize: '0.75rem' }}>
+                <span className="status-pill status-completed" style={{ fontSize: '0.78rem', fontWeight: 800 }}>
                   Timeline
                 </span>
-                <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+                <ChevronRight size={20} style={{ color: 'var(--status-completed-text)' }} />
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* 1-Tap Trusted Vet Call Card */}
-      {activePet && <VetContactCard petId={activePet.id} petName={activePet.name} />}
+      {activePet && (
+        <>
+          <PhotoModal
+            isOpen={isPhotoModalOpen}
+            petId={activePet.id}
+            petName={activePet.name}
+            hasExistingPhoto={Boolean(activePet.photo_url)}
+            onClose={() => setIsPhotoModalOpen(false)}
+            onSuccess={async () => {
+              await refreshPets();
+              await fetchDashboard();
+            }}
+          />
+
+          <VaccineCardScannerModal
+            isOpen={isScannerOpen}
+            petId={activePet.id}
+            petName={activePet.name}
+            petSpecies={activePet.species}
+            onClose={() => setIsScannerOpen(false)}
+            onSuccess={async () => {
+              await refreshPets();
+              await fetchDashboard();
+            }}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -1703,4 +1703,122 @@ body.grandma-mode .paw-input {
   letter-spacing: -0.01em;
 }
 
+/* ==========================================================================
+   Eye-Catching Feature Spotlight & Vibrant Quick Care Modules
+   Designed directly from Grandma-Proof testing feedback so key camera,
+   vaccine scanning, and medical features stand out effortlessly.
+   ========================================================================== */
+.feature-spotlight-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+@media (min-width: 760px) {
+  .feature-spotlight-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.feature-spotlight-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  width: 100%;
+  border: 2px solid var(--theme-hover-border);
+  box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inset);
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms ease;
+}
+
+.feature-spotlight-card.spotlight-primary {
+  background: linear-gradient(135deg, var(--theme-primary-light) 0%, #ffffff 100%);
+}
+
+.feature-spotlight-card.spotlight-secondary {
+  background: linear-gradient(135deg, #ffffff 0%, var(--theme-primary-subtle) 100%);
+}
+
+.feature-spotlight-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--clay-shadow-hover), var(--clay-shadow-inset);
+}
+
+.spotlight-icon-bubble {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--theme-primary);
+  color: var(--theme-primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px var(--theme-glow), inset 2px 2px 4px rgba(255, 255, 255, 0.7);
+}
+
+.spotlight-icon-bubble.spotlight-icon-alt {
+  background: var(--theme-primary-light);
+  border: 2px solid var(--theme-hover-border);
+}
+
+.spotlight-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--theme-primary-dark);
+  margin-bottom: 0.15rem;
+}
+
+.spotlight-title {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.25;
+}
+
+.spotlight-desc {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+.quick-care-card.quick-care-vibrant {
+  border: 1.8px solid var(--theme-hover-border);
+}
+
+.quick-care-card.quick-care-reminders {
+  background: linear-gradient(135deg, #ffffff 0%, var(--theme-primary-subtle) 100%);
+}
+
+.quick-care-card.quick-care-vault {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+}
+
+.quick-care-card.quick-care-history {
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+@media (max-width: 520px) {
+  .feature-spotlight-card {
+    flex-wrap: wrap;
+    padding: 1.1rem;
+  }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-slow {
+  animation: spinSlow 1.8s linear infinite;
+}
+
 

@@ -1,21 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { usePet } from '../context/PetContext';
+import { AuthenticatedPetPhoto } from '../components/AuthenticatedPetPhoto';
 import { Plus, Check, ArrowRight, Bell, FileText, Sparkles } from 'lucide-react';
 
 export const PetsPage: React.FC = () => {
   const { pets, selectedPetId, setSelectedPetId, loading } = usePet();
   const navigate = useNavigate();
-
-  const getSpeciesEmoji = (species: string) => {
-    switch (species.toLowerCase()) {
-      case 'cat': return '🐱';
-      case 'dog': return '🐶';
-      case 'bird': return '🦜';
-      case 'rabbit': return '🐰';
-      default: return '🐾';
-    }
-  };
 
   const handleSelectPet = (id: string) => {
     setSelectedPetId(id);
@@ -111,11 +102,13 @@ export const PetsPage: React.FC = () => {
                       boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
                     }}
                   >
-                    {pet.photo_url ? (
-                      <img src={pet.photo_url} alt={pet.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <span style={{ fontSize: '1.75rem' }}>{getSpeciesEmoji(pet.species)}</span>
-                    )}
+                    <AuthenticatedPetPhoto
+                      petId={pet.id}
+                      hasPhoto={Boolean(pet.photo_url || pet.photo_key)}
+                      petName={pet.name}
+                      species={pet.species}
+                      emojiFontSize="1.75rem"
+                    />
                   </div>
 
                   <div style={{ flex: 1, minWidth: 0 }}>

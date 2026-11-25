@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import type { Pet } from '../types';
+import { AuthenticatedPetPhoto } from './AuthenticatedPetPhoto';
 import {
   Bell, FileText, History, LayoutDashboard, Edit,
   ArrowLeft, Camera, AlertCircle
@@ -17,16 +18,6 @@ export const PetHeader: React.FC<PetHeaderProps> = ({ pet, onOpenPhotoModal }) =
   const bubbleShadow = isCat ? 'inset 0 4px 12px rgba(246, 220, 121, 0.35)' : 'inset 0 4px 12px rgba(154, 217, 113, 0.25)';
   const cameraBg = isCat ? 'var(--cat-color)' : 'var(--mint)';
   const cameraColor = isCat ? 'var(--cat-color-dark)' : 'var(--mint-dark)';
-
-  const getSpeciesEmoji = (species: string) => {
-    switch (species.toLowerCase()) {
-      case 'cat': return '🐱';
-      case 'dog': return '🐶';
-      case 'bird': return '🦜';
-      case 'rabbit': return '🐰';
-      default: return '🐾';
-    }
-  };
 
   const getAgeDisplay = () => {
     if (pet.date_of_birth) {
@@ -95,22 +86,27 @@ export const PetHeader: React.FC<PetHeaderProps> = ({ pet, onOpenPhotoModal }) =
               transition: 'var(--transition-smooth)',
             }}
           >
-            {pet.photo_url ? (
-              <img
-                src={pet.photo_url}
-                alt={pet.name}
-                style={{
-                  width: '150px',
-                  height: '150px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '4px solid #ffffff',
-                  boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
-                }}
+            <div
+              style={{
+                width: '150px',
+                height: '150px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                border: pet.photo_url ? '4px solid #ffffff' : 'none',
+                boxShadow: pet.photo_url ? '0 8px 20px rgba(0,0,0,0.08)' : 'none',
+              }}
+            >
+              <AuthenticatedPetPhoto
+                petId={pet.id}
+                hasPhoto={Boolean(pet.photo_url || pet.photo_key)}
+                petName={pet.name}
+                species={pet.species}
+                emojiFontSize="5rem"
               />
-            ) : (
-              <span style={{ fontSize: '5rem', lineHeight: 1 }}>{getSpeciesEmoji(pet.species)}</span>
-            )}
+            </div>
 
             {onOpenPhotoModal && (
               <button
