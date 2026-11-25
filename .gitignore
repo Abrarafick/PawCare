@@ -114,3 +114,4 @@ dmypy.json
 .ruff_cache/
 
 .neon
+project_media/

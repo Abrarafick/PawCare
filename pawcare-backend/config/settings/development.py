@@ -10,7 +10,7 @@ DEBUG = True
 
 # Database: Connect to Neon PostgreSQL if DATABASE_URL is present, otherwise fallback to SQLite
 database_url = os.environ.get('DATABASE_URL')
-if database_url:
+if database_url and database_url != 'sqlite':
     from config.settings.production import _parse_db_url
     DATABASES = {
         'default': _parse_db_url(database_url)

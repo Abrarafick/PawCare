@@ -364,6 +364,10 @@ button, input, select, textarea {
   box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2), inset 3px 3px 6px rgba(185, 28, 28, 0.25);
 }
 
+.btn-pill svg {
+  flex-shrink: 0;
+}
+
 .btn-pill-sm {
   padding: 0.5rem 1.15rem;
   font-size: 0.85rem;
@@ -1621,6 +1625,19 @@ body.grandma-mode .paw-navbar-actions {
 @media (max-width: 520px) {
   .hide-xs-text {
     display: none;
+  }
+
+  .navbar-easy-btn,
+  .navbar-help-btn {
+    padding: 0.45rem 0.65rem !important;
+    min-width: 44px;
+    min-height: 44px !important;
+  }
+
+  body.grandma-mode .paw-navbar .btn-pill-danger.btn-pill-sm {
+    padding: 0.45rem 0.8rem !important;
+    font-size: 0.82rem;
+    min-height: 44px !important;
   }
 }
 
