@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { dashboardApi } from '../api/dashboard';
 import { usePet } from '../context/PetContext';
+import { useAccessibility } from '../context/AccessibilityContext';
+import { ReadAloudButton } from '../components/ReadAloudButton';
+import { VetContactCard } from '../components/VetContactCard';
 import type { DashboardData, DashboardPetSummary } from '../types';
 import {
   Plus, AlertTriangle, Calendar, FileText, ArrowRight,
@@ -11,6 +14,7 @@ import {
 export const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const { selectedPetId, setSelectedPetId } = usePet();
+  const { grandmaMode } = useAccessibility();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -85,6 +89,15 @@ export const DashboardPage: React.FC = () => {
   const heroTagClass = isCat ? 'hero-pet-tag-cat' : 'hero-pet-tag-dog';
   const heroTextColor = isCat ? 'var(--cat-color-dark)' : 'var(--dog-color-dark)';
 
+  // Plain-English voice readout summary for older adults
+  const voiceSummaryText = activePet
+    ? targetVaccine
+      ? isTargetOverdue
+        ? `Attention! You are viewing ${activePet.name}, your ${activePet.species}. ${targetVaccine.vaccine_name} was due on ${formattedNextDate} and is overdue. Please call your vet clinic or open Vaccination Reminders.`
+        : `Hello! You are viewing ${activePet.name}, your ${activePet.species}. Next vaccination is ${targetVaccine.vaccine_name}, due on ${formattedNextDate}, in ${nextUpcoming?.days_until_due} days.`
+      : `Hello! You are viewing ${activePet.name}, your ${activePet.species}. Everything is up to date, with no pending vaccinations right now.`
+    : 'Welcome to PawCare. You have not added any pets yet. Tap Add New Pet to get started.';
+
   return (
     <div>
       {/* Friendly Personalized Welcome Heading */}
@@ -95,15 +108,44 @@ export const DashboardPage: React.FC = () => {
             <span style={{ color: 'var(--text-main)' }}>Let's check on your little paws</span> 🐾
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: 500, marginTop: '0.4rem' }}>
-            Vaccination schedules, medical records, and health reminders in one place.
+            {grandmaMode
+              ? 'Tap Listen to hear this page out loud, or tap your pet below.'
+              : 'Vaccination schedules, medical records, and health reminders in one place.'}
           </p>
         </div>
 
-        <Link to="/pets/new" className="btn-pill btn-pill-primary">
-          <Plus size={18} />
-          <span>Add New Pet</span>
-        </Link>
+        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <ReadAloudButton text={voiceSummaryText} size={grandmaMode ? 'md' : 'sm'} />
+          <Link to="/pets/new" className="btn-pill btn-pill-primary">
+            <Plus size={18} />
+            <span>Add New Pet</span>
+          </Link>
+        </div>
       </div>
+
+      {/* Grandma-Proof Plain-English Today's Check-In Box */}
+      {grandmaMode && activePet && (
+        <div
+          className="paw-card"
+          style={{
+            marginBottom: '1.5rem',
+            padding: '1.25rem 1.4rem',
+            background: isTargetOverdue || isTargetCritical ? 'var(--status-overdue-bg)' : 'var(--theme-primary-subtle)',
+            border: `2px solid ${isTargetOverdue || isTargetCritical ? '#dc2626' : 'var(--theme-hover-border)'}`,
+          }}
+        >
+          <div style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: isTargetOverdue || isTargetCritical ? '#dc2626' : 'var(--theme-primary-dark)', marginBottom: '0.3rem' }}>
+            What To Know Today
+          </div>
+          <p style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.45 }}>
+            {targetVaccine
+              ? isTargetOverdue
+                ? `${activePet.name} has a late vaccine (${targetVaccine.vaccine_name}, due ${formattedNextDate}). Please call your vet soon.`
+                : `${activePet.name}'s next shot is ${targetVaccine.vaccine_name} on ${formattedNextDate} (${nextUpcoming?.days_until_due} days away).`
+              : `Good news! ${activePet.name} has no shots due soon. Everything is up to date.`}
+          </p>
+        </div>
+      )}
 
       {/* Pet Selection Categories Row (Inspired by "Categories: All, Cats, Dog, Birds" in the reference) */}
       <div style={{ marginBottom: '1.75rem' }}>
@@ -437,7 +479,7 @@ export const DashboardPage: React.FC = () => {
                 <div>
                   <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>Vaccination Reminders</h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.825rem', marginTop: '0.15rem' }}>
-                    Deadlines, status & booster alerts
+                    {grandmaMode ? 'See upcoming shot dates & add reminders' : 'Deadlines, status & booster alerts'}
                   </p>
                 </div>
               </div>
@@ -472,9 +514,9 @@ export const DashboardPage: React.FC = () => {
                   <FileText size={22} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>Medical Vault</h3>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>{grandmaMode ? 'Saved Vet Papers' : 'Medical Vault'}</h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.825rem', marginTop: '0.15rem' }}>
-                    Prescriptions, lab PDFs & camera scans
+                    {grandmaMode ? 'View vet receipts, notes & paper photos' : 'Prescriptions, lab PDFs & camera scans'}
                   </p>
                 </div>
               </div>
@@ -511,7 +553,7 @@ export const DashboardPage: React.FC = () => {
                 <div>
                   <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>Vaccination History</h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.825rem', marginTop: '0.15rem' }}>
-                    Archived past records & administration dates
+                    {grandmaMode ? 'Past shots your pet already got' : 'Archived past records & administration dates'}
                   </p>
                 </div>
               </div>
@@ -526,6 +568,9 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* 1-Tap Trusted Vet Call Card */}
+      {activePet && <VetContactCard petId={activePet.id} petName={activePet.name} />}
     </div>
   );
 };

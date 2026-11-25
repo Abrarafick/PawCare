@@ -1,0 +1,56 @@
+# 🏆 Devpost Submission Guide — PawCare (Grandma-Proof Edition)
+
+Use this checklist and template when submitting on Devpost so every official hackathon rule (Rules 1–8) is clearly satisfied.
+
+---
+
+## ✅ Pre-Submission Checklist
+
+- [ ] **Solo Entry (Rule 1):** Submitted individually under one theme (**Grandma-Proof**).
+- [ ] **Real Older Adult Usability Test Completed (Rule 6):** Tested live with at least one older adult with consent, logged real feedback in [`GRANDMA_PROOF_TESTING.md`](GRANDMA_PROOF_TESTING.md), and implemented improvements based on their feedback.
+- [ ] **Live Links Verified (Rule 5):**
+  - GitHub Repository: `https://github.com/Abrarafick/PawCare` (public and up to date with latest commits)
+  - Live Frontend (Vercel): *(paste your Vercel URL)*
+  - Live Backend API (Render): `https://pawcare-backend-nb5o.onrender.com/api/`
+- [ ] **2–5 Minute Demo Video Recorded (Rule 5):** Shows login, switching pets/themes, turning on **Easy Mode (Grandma-Proof)**, **Read Aloud**, **Help Guide**, **1-Tap Call Vet**, vaccination reminders, medical vault, and a walkthrough of the older adult testing feedback + fixes.
+
+---
+
+## 📝 Devpost Project Description Template (Copy & Customize)
+
+### Project Name
+**PawCare — Grandma-Proof Pet Health Companion**
+
+### Selected Theme
+**Grandma-Proof**
+
+### Inspiration & Problem
+Many older adults rely on their dogs and cats for daily companionship, yet modern veterinary portals and pet health apps are packed with tiny text, unlabeled icons, multi-step menus, and confusing medical jargon. Missing a booster shot or struggling to find a vet's phone number or vaccination receipt causes unnecessary stress for senior pet owners.
+
+### What It Does
+PawCare is a full-stack pet health, vaccination reminder, and private medical document tracker designed to be friendly for everyone—and specifically **Grandma-Proof** through an instant **Easy Mode**:
+- **Always-Visible Easy Mode Toggle:** One tap in the top bar (available from the login screen onward) switches the app to larger base typography (`18px` / `20px`), `48px+` tap targets, stronger high-contrast borders, and plain-English wording (e.g., *"Saved Vet Papers"* instead of *"Medical Vault"*).
+- **Clear Icon Labels Everywhere:** Standard bottom dock icons gain unmistakable text labels (*Home*, *Pets*, *Health*, *Profile*) and the top logout icon expands to an explicit **"Log Out"** button in Easy Mode.
+- **🔊 One-Tap Read Aloud:** Built-in Web Speech API voice readout speaks plain-language daily check-ins and vaccination dates at a comfortable pace (`0.9x` rate in Easy Mode).
+- **What To Know Today Banner:** Summarizes the single most urgent action (or reassures the owner when everything is up to date) in plain language.
+- **📞 1-Tap Trusted Vet Call Card:** Stores the vet clinic's name and phone number right on the home screen with a large **"Call Vet Now"** button.
+- **Step-by-Step Help Guide:** A calm, 4-step visual guide accessible from any screen with its own **"Listen to Guide"** button.
+
+### Pre-Existing Foundation & Hackathon Development Disclosure (Rule 3)
+In accordance with Rule 3, I am disclosing the exact boundary between pre-existing work and new hackathon development:
+- **Pre-existing foundation (built prior to the hackathon):** Core Django REST Framework backend (authentication, pet CRUD, vaccination status tracking, private medical report vault), base React + TypeScript frontend, Claymorphism theme styling (Dog mint-green / Cat butter-yellow), and Render/Neon/Vercel deployment setup.
+- **New development completed during the hackathon:**
+  - `AccessibilityContext` supporting persistent **Easy Mode (Grandma-Proof)**, **Large / Extra-Large text scaling**, **High-Contrast borders**, and **Web Speech API** voice synthesis (`ReadAloudButton`).
+  - Redesigned `Navbar` and `FloatingBottomNav` with labeled navigation slots and explicit `"Log Out"` button in Easy Mode.
+  - Plain-English **"What To Know Today"** check-in card and simplified Quick Care descriptions on `DashboardPage`.
+  - **1-Tap Trusted Vet Contact Card** (`VetContactCard`) with direct `tel:` dialing.
+  - **How to Use PawCare** visual & spoken help modal (`HelpGuideModal`) and **Easy Reading & Accessibility** panel in `ProfilePage`.
+  - Usability testing with a real older adult and follow-up refinements *(describe the specific improvements you made after testing!)*.
+
+### Usability Testing & Improvements (Rule 6)
+*(Paste the real participant feedback you observed and the exact UI improvements you made after testing from `GRANDMA_PROOF_TESTING.md`!)*
+
+### Built With (Rule 4 — Third-Party Libraries & AI Disclosure)
+- **Backend:** Python, Django 5, Django REST Framework, SimpleJWT, Neon PostgreSQL, WhiteNoise, Gunicorn (deployed on Render).
+- **Frontend:** React 19, TypeScript, Vite, React Router 7, TanStack Query, Axios, Lucide Icons, Web Speech API (deployed on Vercel).
+- **AI Tools Used:** Antigravity AI coding assistant was used to assist with implementation, accessibility styling, code review, and documentation, with all features integrated, built, and verified by me.

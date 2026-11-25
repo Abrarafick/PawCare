@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { PetProvider } from './context/PetContext';
 import { PetThemeProvider, usePetTheme } from './context/PetThemeContext';
+import { AccessibilityProvider, useAccessibility } from './context/AccessibilityContext';
 import { NavigationDirectionController } from './components/NavigationDirectionController';
 import { FixedBackgroundLayer } from './components/FixedBackgroundLayer';
 import { SlidingPageContainer } from './components/SlidingPageContainer';
@@ -34,9 +35,10 @@ const queryClient = new QueryClient({
 
 const AppContent: React.FC = () => {
   const { theme } = usePetTheme();
+  const { grandmaMode } = useAccessibility();
 
   return (
-    <div className={`app-container theme-${theme}`}>
+    <div className={`app-container theme-${theme} ${grandmaMode ? 'grandma-mode' : ''}`}>
       {/* Fixed Stationary Background Layer
           Stays completely fixed in viewport space.
           Only cross-fades Dog/Cat/Neutral themes when pet selection changes.
@@ -83,17 +85,19 @@ const AppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <PetProvider>
-          <PetThemeProvider>
-            <BrowserRouter>
-              <NavigationDirectionController>
-                <AppContent />
-              </NavigationDirectionController>
-            </BrowserRouter>
-          </PetThemeProvider>
-        </PetProvider>
-      </AuthProvider>
+      <AccessibilityProvider>
+        <AuthProvider>
+          <PetProvider>
+            <PetThemeProvider>
+              <BrowserRouter>
+                <NavigationDirectionController>
+                  <AppContent />
+                </NavigationDirectionController>
+              </BrowserRouter>
+            </PetThemeProvider>
+          </PetProvider>
+        </AuthProvider>
+      </AccessibilityProvider>
     </QueryClientProvider>
   );
 };

@@ -2,15 +2,25 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { usePet } from '../context/PetContext';
+import { useAccessibility, type TextScale } from '../context/AccessibilityContext';
 import { ConfirmModal } from '../components/ConfirmModal';
+import { ReadAloudButton } from '../components/ReadAloudButton';
 import {
   User, Shield, Mail, Calendar, PawPrint, LogOut,
-  Sparkles, CheckCircle2, ChevronRight
+  Sparkles, CheckCircle2, ChevronRight, Glasses, Type, Eye
 } from 'lucide-react';
 
 export const ProfilePage: React.FC = () => {
   const { user, logout } = useAuth();
   const { pets, selectedPet } = usePet();
+  const {
+    grandmaMode,
+    setGrandmaMode,
+    textScale,
+    setTextScale,
+    highContrast,
+    setHighContrast,
+  } = useAccessibility();
   const navigate = useNavigate();
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -118,6 +128,120 @@ export const ProfilePage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Grandma-Proof Accessibility & Easy Reading Settings */}
+      <div className="paw-card" style={{ marginBottom: '1.5rem', padding: '1.35rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <Glasses size={20} style={{ color: 'var(--theme-primary-dark)' }} />
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800 }}>
+              Easy Reading & Accessibility
+            </h2>
+          </div>
+
+          <ReadAloudButton
+            text="Easy Reading Settings. Turn on Easy Mode for larger text, clear button labels, and stronger outlines."
+            label="Test Voice"
+          />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+          {/* Master Easy Mode Toggle */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem',
+              padding: '0.95rem 1rem',
+              borderRadius: 'var(--radius-md)',
+              background: grandmaMode ? 'var(--theme-primary-subtle)' : 'var(--bg-chip)',
+              border: grandmaMode ? '2px solid var(--theme-hover-border)' : '1px solid var(--border-light)',
+            }}
+          >
+            <div>
+              <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--text-main)' }}>
+                Easy Mode (Grandma-Proof)
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
+                Enables larger letters, clear icon text labels, high-contrast outlines, and plain wording.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setGrandmaMode(!grandmaMode)}
+              className={`btn-pill btn-pill-sm ${grandmaMode ? 'btn-pill-primary' : 'btn-pill-secondary'}`}
+              aria-pressed={grandmaMode}
+            >
+              {grandmaMode ? 'ON' : 'OFF'}
+            </button>
+          </div>
+
+          {/* Text Size Picker */}
+          <div
+            style={{
+              padding: '0.95rem 1rem',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--bg-chip)',
+              border: '1px solid var(--border-light)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.65rem' }}>
+              <Type size={17} style={{ color: 'var(--text-muted)' }} />
+              <span style={{ fontWeight: 800, fontSize: '0.95rem' }}>Text Size</span>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              {([
+                { id: 'standard', label: 'Standard' },
+                { id: 'large', label: 'Large (A+)' },
+                { id: 'xlarge', label: 'Extra Large (A++)' },
+              ] as { id: TextScale; label: string }[]).map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setTextScale(opt.id)}
+                  className={`btn-pill btn-pill-sm ${textScale === opt.id ? 'btn-pill-primary' : 'btn-pill-secondary'}`}
+                  aria-pressed={textScale === opt.id}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* High Contrast Outlines */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem',
+              padding: '0.95rem 1rem',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--bg-chip)',
+              border: '1px solid var(--border-light)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <Eye size={18} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>High-Contrast Borders</div>
+                <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                  Makes buttons, cards, and inputs easier to see clearly.
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setHighContrast(!highContrast)}
+              className={`btn-pill btn-pill-sm ${highContrast ? 'btn-pill-primary' : 'btn-pill-secondary'}`}
+              aria-pressed={highContrast}
+            >
+              {highContrast ? 'ON' : 'OFF'}
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Account Settings & Security Details */}
       <div className="paw-card" style={{ marginBottom: '1.5rem', padding: '1.25rem' }}>

@@ -6,6 +6,7 @@ import { usePet } from '../context/PetContext';
 import type { Pet, VaccinationRecord } from '../types';
 import { PetHeader } from '../components/PetHeader';
 import { ConfirmModal } from '../components/ConfirmModal';
+import { ReadAloudButton } from '../components/ReadAloudButton';
 import {
   Plus, CheckCircle, AlertTriangle, Calendar,
   Edit2, Trash2, X, Hospital, Clock, CheckCircle2, ShieldAlert
@@ -262,10 +263,19 @@ export const VaccinationsPage: React.FC = () => {
           </p>
         </div>
 
-        <button onClick={openAddModal} className="btn-pill btn-pill-primary">
-          <Plus size={18} />
-          <span>Add Reminder</span>
-        </button>
+        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <ReadAloudButton
+            text={
+              reminders.filter((r) => !r.is_completed).length > 0
+                ? `${pet.name} has ${reminders.filter((r) => !r.is_completed).length} upcoming or overdue vaccinations. Next is ${reminders.filter((r) => !r.is_completed)[0].vaccine_name}, due on ${reminders.filter((r) => !r.is_completed)[0].due_date}.`
+                : `${pet.name} has no pending vaccinations. Everything is up to date.`
+            }
+          />
+          <button onClick={openAddModal} className="btn-pill btn-pill-primary">
+            <Plus size={18} />
+            <span>Add Reminder</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter Pills with 4 Status Indicators */}

@@ -1594,3 +1594,96 @@ button.paw-card:active,
   }
 }
 
+/* ==========================================================================
+   Grandma-Proof Accessibility System
+   Supports Easy Mode, Large / Extra-Large text scaling, High-Contrast outlines,
+   and clearly labeled floating bottom navigation for older adults.
+   ========================================================================== */
+html.text-scale-large {
+  font-size: 18px;
+}
+
+html.text-scale-xlarge {
+  font-size: 20px;
+}
+
+body.grandma-mode .paw-navbar-actions {
+  gap: 0.5rem;
+}
+
+@media (max-width: 720px) {
+  body.grandma-mode .hide-sm-badge,
+  .hide-sm-badge {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .hide-xs-text {
+    display: none;
+  }
+}
+
+/* High Contrast Outlines & Text Legibility */
+body.high-contrast {
+  --text-main: #0a1009;
+  --text-muted: #2d382b;
+  --text-soft: #435240;
+  --border-light: #9ab094;
+  --border-subtle: #b7c7b2;
+}
+
+body.high-contrast .paw-card,
+body.high-contrast .quick-care-card,
+body.high-contrast .home-next-vax-card,
+body.high-contrast .paw-input,
+body.high-contrast .btn-pill-secondary,
+body.high-contrast .pet-category-pill {
+  border: 2px solid #50644a !important;
+}
+
+body.theme-cat.high-contrast .paw-card,
+body.theme-cat.high-contrast .quick-care-card,
+body.theme-cat.high-contrast .home-next-vax-card,
+body.theme-cat.high-contrast .paw-input,
+body.theme-cat.high-contrast .btn-pill-secondary,
+body.theme-cat.high-contrast .pet-category-pill {
+  border: 2px solid #7c5c07 !important;
+}
+
+/* Bigger Tap Targets & Clear Bottom Nav Labels in Easy Mode */
+body.grandma-mode .btn-pill,
+body.grandma-mode .pet-category-pill,
+body.grandma-mode .paw-input {
+  min-height: 48px;
+}
+
+.paw-floating-bottom-nav.grandma-nav {
+  width: min(390px, calc(100vw - 1.25rem));
+  padding: 0.45rem 0.6rem;
+}
+
+.paw-floating-bottom-nav.grandma-nav .bottom-nav-track {
+  height: 64px;
+}
+
+.paw-floating-bottom-nav.grandma-nav .bottom-nav-slider-bubble,
+.paw-floating-bottom-nav.grandma-nav .bottom-nav-slot-bg {
+  width: 68px;
+  height: 56px;
+  border-radius: 24px;
+}
+
+.paw-floating-bottom-nav.grandma-nav .bottom-nav-slot-icon {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bottom-nav-slot-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+

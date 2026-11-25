@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home, PawPrint, HeartPulse, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useAccessibility } from '../context/AccessibilityContext';
 import { useNavigationDirection } from './NavigationDirectionController';
 
 interface FloatingBottomNavProps {
@@ -9,6 +10,7 @@ interface FloatingBottomNavProps {
 
 export const FloatingBottomNav: React.FC<FloatingBottomNavProps> = ({ onTabChange }) => {
   const { isAuthenticated } = useAuth();
+  const { grandmaMode } = useAccessibility();
   const { currentIndex, navigateToTab } = useNavigationDirection();
 
   // If user is not authenticated, do not render bottom dock
@@ -51,7 +53,10 @@ export const FloatingBottomNav: React.FC<FloatingBottomNavProps> = ({ onTabChang
   ];
 
   return (
-    <nav className="paw-floating-bottom-nav" aria-label="Bottom Navigation">
+    <nav
+      className={`paw-floating-bottom-nav ${grandmaMode ? 'grandma-nav' : ''}`}
+      aria-label="Bottom Navigation"
+    >
       <div className="bottom-nav-track">
         {/* Physical Sliding Indicator (Synchronized with 380ms page transition) */}
         <div
@@ -81,9 +86,10 @@ export const FloatingBottomNav: React.FC<FloatingBottomNavProps> = ({ onTabChang
               {/* Soft Light-Grey Inactive Circular Background */}
               <div className="bottom-nav-slot-bg" aria-hidden="true" />
 
-              {/* Centered Icon with synchronized scale & color transition */}
+              {/* Centered Icon with optional clear label in Easy Mode */}
               <div className={`bottom-nav-slot-icon ${isActive ? 'active' : 'inactive'}`}>
-                <Icon size={21} strokeWidth={isActive ? 2.5 : 2} />
+                <Icon size={grandmaMode ? 22 : 21} strokeWidth={isActive ? 2.5 : 2} />
+                {grandmaMode && <span className="bottom-nav-slot-label">{item.label}</span>}
               </div>
             </button>
           );

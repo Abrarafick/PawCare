@@ -8,6 +8,7 @@ PawCare is a full-stack web and mobile-responsive pet health management platform
 
 ## ✨ Features
 
+- 👵 **Grandma-Proof Easy Mode** — Built-in accessibility system with one-tap **Easy Mode** in the top bar: larger text scaling (`Large` / `Extra Large`), high-contrast borders, clear text labels on navigation icons, plain-language check-in cards, a **Read Aloud** voice summary button (Web Speech API), a **Step-by-Step Help Guide**, and a **1-Tap Call Vet** card.
 - 🐶🐱 **Species-Aware Claymorphism UI** — Soft, tactile 3D clay aesthetic with dynamic color themes:
   - **Dog Theme:** Mint-green palette with cute puppy line-art floating background icons.
   - **Cat Theme:** Pastel warm butter-yellow palette with cute kitten line-art floating background icons.
@@ -179,6 +180,8 @@ PawCare/
 ├── start-backend.bat           # Starts backend server on port 8000
 ├── start-frontend.bat          # Starts frontend server on port 5173
 ├── README.md                   # Project documentation
+├── GRANDMA_PROOF_TESTING.md    # Senior usability testing guide & feedback log
+├── DEVPOST_SUBMISSION.md       # Hackathon submission & disclosure template
 ├── PRD.md                      # Product Requirements Document
 ├── ARCHITECTURE.md             # System architecture & API specifications
 └── DATABASE_SCHEMA.md          # Database schema & entity relationships
