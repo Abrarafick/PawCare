@@ -85,7 +85,7 @@ export const AuthenticatedPetPhoto: React.FC<AuthenticatedPetPhotoProps> = ({
     }
 
     apiClient
-      .get(`/pets/${petId}/photo/`, { responseType: 'blob' })
+      .get(`/pets/${petId}/photo/serve/`, { responseType: 'blob' })
       .then((res) => {
         if (!active) return;
         const url = URL.createObjectURL(res.data);

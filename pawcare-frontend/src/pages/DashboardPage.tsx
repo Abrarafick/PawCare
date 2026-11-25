@@ -24,18 +24,18 @@ export const DashboardPage: React.FC = () => {
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const navigate = useNavigate();
 
-  const fetchDashboard = async () => {
+  const fetchDashboard = async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const res = await dashboardApi.getSummary();
       setData(res);
       if (res.pets.length > 0 && !selectedPetId) {
         setSelectedPetId(res.pets[0].id);
       }
     } catch {
-      setError('Unable to load dashboard summary.');
+      if (!silent) setError('Unable to load dashboard summary.');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -66,7 +66,7 @@ export const DashboardPage: React.FC = () => {
     return (
       <div className="paw-alert paw-alert-overdue" style={{ margin: '2rem 0' }}>
         <span>{error || 'Failed to load data.'}</span>
-        <button onClick={fetchDashboard} className="btn-pill btn-pill-secondary btn-pill-sm" style={{ marginLeft: 'auto' }}>
+        <button onClick={() => fetchDashboard(false)} className="btn-pill btn-pill-secondary btn-pill-sm" style={{ marginLeft: 'auto' }}>
           Retry
         </button>
       </div>
@@ -671,7 +671,7 @@ export const DashboardPage: React.FC = () => {
             onClose={() => setIsPhotoModalOpen(false)}
             onSuccess={async () => {
               await refreshPets();
-              await fetchDashboard();
+              await fetchDashboard(true);
             }}
           />
 
@@ -683,7 +683,7 @@ export const DashboardPage: React.FC = () => {
             onClose={() => setIsScannerOpen(false)}
             onSuccess={async () => {
               await refreshPets();
-              await fetchDashboard();
+              await fetchDashboard(true);
             }}
           />
         </>

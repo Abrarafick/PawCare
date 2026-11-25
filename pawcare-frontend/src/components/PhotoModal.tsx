@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { petsApi } from '../api/pets';
 import { invalidatePetPhotoCache } from './AuthenticatedPetPhoto';
 import { prepareCameraImage } from '../utils/imageCompress';
@@ -91,7 +92,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
     }
   };
 
-  return (
+  return createPortal(
     <div
       className="paw-modal-backdrop"
       onClick={(e) => {
@@ -236,6 +237,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

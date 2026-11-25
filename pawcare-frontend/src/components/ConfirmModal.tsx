@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { AlertTriangle, X } from 'lucide-react';
 
 interface ConfirmModalProps {
@@ -24,7 +25,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="paw-modal-backdrop">
       <div className="paw-modal-card" style={{ maxWidth: '440px' }}>
         <div className="paw-modal-header">
@@ -74,6 +75,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

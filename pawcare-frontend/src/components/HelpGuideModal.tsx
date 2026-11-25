@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { X, HelpCircle, Glasses, PawPrint, Bell, FileText, Phone } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { ReadAloudButton } from './ReadAloudButton';
@@ -39,7 +40,7 @@ export const HelpGuideModal: React.FC<HelpGuideModalProps> = ({ isOpen, onClose 
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       className="paw-modal-backdrop"
       role="dialog"
@@ -163,6 +164,7 @@ export const HelpGuideModal: React.FC<HelpGuideModalProps> = ({ isOpen, onClose 
           Got It, Back to PawCare
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

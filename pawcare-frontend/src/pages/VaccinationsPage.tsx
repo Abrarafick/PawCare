@@ -47,10 +47,10 @@ export const VaccinationsPage: React.FC = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const loadData = async () => {
+  const loadData = async (silent = false) => {
     if (!petId) return;
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const [petData, vaxData] = await Promise.all([
         petsApi.get(petId),
         vaccinationsApi.list(petId), // Load all to compute filters
@@ -58,9 +58,9 @@ export const VaccinationsPage: React.FC = () => {
       setPet(petData);
       setReminders(vaxData);
     } catch {
-      setError('Failed to load vaccination records for this pet.');
+      if (!silent) setError('Failed to load vaccination records for this pet.');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -663,7 +663,7 @@ export const VaccinationsPage: React.FC = () => {
           petName={pet.name}
           petSpecies={pet.species}
           onClose={() => setIsScannerOpen(false)}
-          onSuccess={loadData}
+          onSuccess={() => loadData(true)}
         />
       )}
     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Tesseract from 'tesseract.js';
 import { Camera, Upload, Sparkles, CheckCircle2, Calendar, FileText, X, RefreshCw, AlertCircle } from 'lucide-react';
 import { reportsApi } from '../api/reports';
@@ -186,7 +187,7 @@ export const VaccineCardScannerModal: React.FC<VaccineCardScannerModalProps> = (
     }
   };
 
-  return (
+  return createPortal(
     <div
       className="paw-modal-backdrop"
       role="dialog"
@@ -471,6 +472,7 @@ export const VaccineCardScannerModal: React.FC<VaccineCardScannerModalProps> = (
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
